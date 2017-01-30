@@ -48,9 +48,9 @@ namespace Freshdesk {
             ApiKey = apiKey;
             ApiUri = apiUri;
             // Force TLS 1.1 or higher. Anything lower is deprecated in the Freshdesk API as of 2016-09-30
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls | SecurityProtocolType.Tls;
             foreach (SecurityProtocolType p in SecurityProtocolType.GetValues(typeof(SecurityProtocolType))) {
-                if (p > SecurityProtocolType.Tls11) ServicePointManager.SecurityProtocol |= p;
+                if (p > SecurityProtocolType.Tls) ServicePointManager.SecurityProtocol |= p;
             }
         }
         #endregion
@@ -183,7 +183,7 @@ namespace Freshdesk {
                     WriteBoundaryBytes(requestStream, boundary, false);
 
                     WriteContentDispositionFileHeader(requestStream, attachmentsKey,
-                        attachment.FileName, MimeMapping.GetMimeMapping(attachment.FileName));
+                        attachment.FileName, /**MimeMapping.GetMimeMapping(attachment.FileName)*/ String.Empty);
                     var data = new byte[attachment.Content.Length];
                     attachment.Content.Read(data, 0, data.Length);
 
@@ -368,6 +368,24 @@ namespace Freshdesk {
                 }
             }
             return users;
+        }
+
+
+        #endregion
+
+        #region Time Entries
+        /// <summary>
+        /// Creates a Time Entry
+        /// </summary>
+        /// <param name="createTimeRequest"></param>
+        /// <returns></returns>
+        public GetTimeResponse CreateTimeEntry(CreateTimeRequest createTimeRequest, int ticket)
+        {
+            if (createTimeRequest == null)
+            {
+                throw new ArgumentNullException("createTimeRequest");
+            }
+            return DoRequest<GetTimeResponse>(UriForPath("/helpdesk/tickets/" + ticket.ToString() + "/time_sheets.json"), "POST", JsonConvert.SerializeObject(createTimeRequest));
         }
 
 

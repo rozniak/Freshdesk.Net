@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Freshdesk</RootNamespace>
     <AssemblyName>Freshdesk</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,6 +39,9 @@
     <AssemblyOriginatorKeyFile>Freshdesk.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>libs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -46,17 +50,17 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attachment.cs" />
     <Compile Include="CreateTicketOptions.cs" />
+    <Compile Include="CreateTimeInfo.cs" />
+    <Compile Include="CreateTimeRequest.cs" />
     <Compile Include="CreateUserRequest.cs" />
     <Compile Include="CreateCustomerRequest.cs" />
     <Compile Include="CreateTicketInfo.cs" />
     <Compile Include="CreateTicketRequest.cs" />
+    <Compile Include="GetTimeResponse.cs" />
     <Compile Include="GetUserResponse.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="User.cs" />

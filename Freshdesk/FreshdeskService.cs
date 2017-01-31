@@ -81,8 +81,14 @@ namespace Freshdesk {
 
             webRequest.Headers["Authorization"] = GetAuthorizationHeader(ApiKey);
 
+            // TODO: Change this into a switch
             if (method == "POST" || method == "PUT") {
                 webRequest.ContentType = "application/json";
+            }
+            else if (method == "GET")
+            {
+                ((HttpWebRequest)webRequest).AutomaticDecompression = DecompressionMethods.GZip;
+                ((HttpWebRequest)webRequest).Accept = "*/*";
             }
             return webRequest;
         }
@@ -323,6 +329,20 @@ namespace Freshdesk {
             }
 
             return DoMultipartFormRequest<GetTicketResponse>(UriForPath("/helpdesk/tickets.json"), createTicketRequest, attachments, "helpdesk_ticket", "helpdesk_ticket[attachments][][resource]");
+        }
+
+        /// <summary>
+        /// Gets a list of Support Tickets for a company by name
+        /// </summary>
+        /// <param name="companyName"></param>
+        /// <returns></returns>
+        public GetTicketListItemResponse[] GetTicketsByCompany(string companyName)
+        {
+            if (string.IsNullOrEmpty(companyName))
+            {
+                throw new ArgumentNullException("companyName");
+            }
+            return DoRequest<GetTicketListItemResponse[]>(UriForPath("/helpdesk/tickets.json", "company_name=" + companyName + "&filter_name=all_tickets"));
         }
         #endregion
 

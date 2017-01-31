@@ -70,6 +70,7 @@
     <Compile Include="Ticket.cs" />
     <Compile Include="FreshdeskService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GetTicketListItemResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Freshdesk.nuspec" />

@@ -67,9 +67,21 @@ namespace Freshdesk {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Api")]
         protected Uri ApiUri { get; set; }
 
+        /// <summary>
+        /// Gets the last error that occurred.
+        /// </summary>
+        public HelpdeskError LastError { get; private set; }
+
         #endregion
 
         #region Shared
+
+        protected virtual void AnalyseError(ErrorInfo errorInfo)
+        {
+            // Find better way of scanning through fields and setting this up
+            if (errorInfo.NoCompany)
+                LastError = HelpdeskError.NoCompany;
+        }
 
         protected virtual WebRequest SetupRequest(string method, Uri uri) {
             WebRequest webRequest = (WebRequest)WebRequest.Create(uri);
@@ -122,11 +134,35 @@ namespace Freshdesk {
         }
         protected virtual T DoRequest<T>(Uri uri, string method, string body) {
             var json = DoRequest(uri, method, body);
+
+            // TODO: Clean common code
+            if (json.StartsWith("{\"errors\":"))
+            {
+                // Convert to error JSON object
+                var errorJson = JsonConvert.DeserializeObject<GetErrorResponse>(json);
+
+                AnalyseError(errorJson.Errors);
+
+                return default(T);
+            }
+
             return JsonConvert.DeserializeObject<T>(json);
         }
 
         protected virtual T DoMultipartFormRequest<T>(Uri uri, object body, IEnumerable<Attachment> attachments, string propertiesArrayName, string attachmentsKey) {
             var json = DoMultipartFormRequest(uri, body, attachments, propertiesArrayName, attachmentsKey);
+
+            // TODO: Clean common code
+            if (json.StartsWith("{\"errors\":"))
+            {
+                // Convert to error JSON object
+                var errorJson = JsonConvert.DeserializeObject<GetErrorResponse>(json);
+
+                AnalyseError(errorJson.Errors);
+
+                return default(T);
+            }
+
             return JsonConvert.DeserializeObject<T>(json);
         }
 
@@ -148,6 +184,11 @@ namespace Freshdesk {
             try {
                 using (WebResponse resp = (WebResponse)req.GetResponse()) {
                     result = GetResponseAsString(resp);
+
+                    if (result.StartsWith("{\"errors\":"))
+                    {
+
+                    }
                 }
             } catch (WebException wexc) {
                 if (wexc.Response != null) {
@@ -294,6 +335,8 @@ namespace Freshdesk {
         /// <param name="createCustomerRequest"></param>
         /// <returns></returns>
         public GetCustomerResponse CreateCustomer(CreateCustomerRequest createCustomerRequest) {
+            LastError = HelpdeskError.NoError;
+
             if (createCustomerRequest == null) {
                 throw new ArgumentNullException("createCustomerRequest");
             }
@@ -308,6 +351,8 @@ namespace Freshdesk {
         /// <param name="createTicketRequest"></param>
         /// <returns></returns>
         public GetTicketResponse CreateTicket(CreateTicketRequest createTicketRequest) {
+            LastError = HelpdeskError.NoError;
+
             if (createTicketRequest == null) {
                 throw new ArgumentNullException("createTicketRequest");
             }
@@ -321,6 +366,8 @@ namespace Freshdesk {
         /// <param name="attachments"></param>
         /// <returns></returns>
         public GetTicketResponse CreateTicketWithAttachment(CreateTicketRequest createTicketRequest, IEnumerable<Attachment> attachments) {
+            LastError = HelpdeskError.NoError;
+
             if (createTicketRequest == null) {
                 throw new ArgumentNullException("createTicketRequest");
             }
@@ -338,10 +385,13 @@ namespace Freshdesk {
         /// <returns></returns>
         public GetTicketListItemResponse[] GetTicketsByCompany(string companyName)
         {
+            LastError = HelpdeskError.NoError;
+
             if (string.IsNullOrEmpty(companyName))
             {
                 throw new ArgumentNullException("companyName");
             }
+
             return DoRequest<GetTicketListItemResponse[]>(UriForPath("/helpdesk/tickets.json", "company_name=" + companyName + "&filter_name=all_tickets"));
         }
         #endregion
@@ -353,6 +403,8 @@ namespace Freshdesk {
         /// <param name="createUserRequest"></param>
         /// <returns></returns>
         public GetUserResponse CreateUser(CreateUserRequest createUserRequest) {
+            LastError = HelpdeskError.NoError;
+
             if (createUserRequest == null) {
                 throw new ArgumentNullException("createUserRequest");
             }
@@ -365,6 +417,8 @@ namespace Freshdesk {
         /// <param name="updateUserRequest"></param>
         /// <param name="id"></param>
         public void UpdateUser(UpdateUserRequest updateUserRequest, long id) {
+            LastError = HelpdeskError.NoError;
+
             if (updateUserRequest == null) {
                 throw new ArgumentNullException("updateUserRequest");
             }
@@ -376,6 +430,8 @@ namespace Freshdesk {
         /// </summary>
         /// <returns></returns>
 		public IEnumerable<GetUserRequest> GetUsers() {
+            LastError = HelpdeskError.NoError;
+
             var users = new List<GetUserRequest>();
             var page = 1;
             while (true) {
@@ -401,6 +457,8 @@ namespace Freshdesk {
         /// <returns></returns>
         public GetTimeResponse CreateTimeEntry(CreateTimeRequest createTimeRequest, int ticket)
         {
+            LastError = HelpdeskError.NoError;
+
             if (createTimeRequest == null)
             {
                 throw new ArgumentNullException("createTimeRequest");

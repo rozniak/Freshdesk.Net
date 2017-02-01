@@ -60,9 +60,12 @@
     <Compile Include="CreateCustomerRequest.cs" />
     <Compile Include="CreateTicketInfo.cs" />
     <Compile Include="CreateTicketRequest.cs" />
+    <Compile Include="ErrorInfo.cs" />
+    <Compile Include="GetErrorResponse.cs" />
     <Compile Include="GetTimeResponse.cs" />
     <Compile Include="GetUserResponse.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="HelpdeskError.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="GetCustomerResponse.cs" />

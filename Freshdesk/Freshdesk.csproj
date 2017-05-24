@@ -36,7 +36,8 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Freshdesk.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -66,18 +67,19 @@
     <Compile Include="GetUserResponse.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HelpdeskError.cs" />
+    <Compile Include="Schema\Ticket.cs" />
+    <Compile Include="Schema\TicketPriority.cs" />
+    <Compile Include="Schema\TicketSource.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="GetCustomerResponse.cs" />
     <Compile Include="GetTicketResponse.cs" />
     <Compile Include="Ticket.cs" />
-    <Compile Include="FreshdeskService.cs" />
+    <Compile Include="FreshdeskConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GetTicketListItemResponse.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Freshdesk.nuspec" />
-    <None Include="Freshdesk.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

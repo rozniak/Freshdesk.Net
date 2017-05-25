@@ -133,7 +133,7 @@ namespace Freshdesk
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetTicketsByCompany: Parameter 'page' out of range, value must be 1 or greater.");
 
             var result = (IList<Ticket>) await FreshHttpsHelper.DoRequest<IList<Ticket>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets",
-                "company_id=" + id.ToString() + "&page=" + page.ToString() + "&per_page=10"));
+                "company_id=" + id.ToString() + "&page=" + page.ToString() + "&per_page=" + quantity.ToString()));
 
             return new List<Ticket>(result).AsReadOnly();
         }

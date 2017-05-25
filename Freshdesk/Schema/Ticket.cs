@@ -170,7 +170,7 @@ namespace Freshdesk.Schema
         /// <summary>
         /// Gets or sets the ID of the group to which the ticket has been assigned.
         /// </summary>
-        [JsonProperty("group_id")]
+        [JsonProperty("group_id", NullValueHandling = NullValueHandling.Ignore)]
         public long GroupId { get; set; }
 
         /// <summary>

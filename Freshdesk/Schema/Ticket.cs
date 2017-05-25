@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
@@ -38,7 +39,7 @@ namespace Freshdesk.Schema
         /// <summary>
         /// Gets or sets the email address(es) added in the 'cc' field of the incoming ticket email.
         /// </summary>
-        [JsonProperty("cc_emails")]
+        [JsonProperty("cc_emails", NullValueHandling = NullValueHandling.Ignore)]
         public string[] CopiedInRecipients { get; set; }
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace Freshdesk.Schema
         /// 
         /// This property is read-only.
         /// </summary>
-        [JsonProperty("reply_cc_emails")]
+        [JsonProperty("reply_cc_emails", NullValueHandling = NullValueHandling.Ignore)]
         public string[] CopiedInRecipientsOnReply
         {
             get { return _CopiedInRecipientsOnReply; }
@@ -124,7 +125,7 @@ namespace Freshdesk.Schema
         /// <summary>
         /// Gets or sets the ID of email config which is used for this ticket.
         /// </summary>
-        [JsonProperty("email_config_id")]
+        [JsonProperty("email_config_id", NullValueHandling = NullValueHandling.Ignore)]
         public long EmailConfigId { get; set; }
 
         /// <summary>
@@ -158,7 +159,7 @@ namespace Freshdesk.Schema
         /// <summary>
         /// Gets or sets the email address(es) added while forwarding a ticket.
         /// </summary>
-        [JsonProperty("fwd_emails")]
+        [JsonProperty("fwd_emails", NullValueHandling = NullValueHandling.Ignore)]
         public string[] ForwardeeEmails
         {
             get { return _ForwardeeEmails; }
@@ -216,7 +217,7 @@ namespace Freshdesk.Schema
         /// <summary>
         /// Gets or sets the ID of the product to which the ticket is associated.
         /// </summary>
-        [JsonProperty("product_id")]
+        [JsonProperty("product_id", NullValueHandling = NullValueHandling.Ignore)]
         public long ProductId { get; set; }
 
         /// <summary>
@@ -224,7 +225,7 @@ namespace Freshdesk.Schema
         /// 
         /// This property is read-only.
         /// </summary>
-        [JsonProperty("to_emails")]
+        [JsonProperty("to_emails", NullValueHandling = NullValueHandling.Ignore)]
         public string[] Recipients
         {
             get { return _Recipients; }
@@ -294,7 +295,7 @@ namespace Freshdesk.Schema
         /// Gets or sets the issue category that describes the ticket.
         /// </summary>
         [JsonProperty("type")]
-        public int Type { get; set; }
+        public string Type { get; set; }
 
         /// <summary>
         /// Gets or sets the ticket updated timestamp.
@@ -331,6 +332,20 @@ namespace Freshdesk.Schema
         public Ticket(string json)
         {
             JsonConvert.PopulateObject(json, this);
+            ReadOnlyLocked = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Ticket class from a JSON object.
+        /// </summary>
+        /// <param name="obj">The JSON object.</param>
+        public Ticket(JObject obj)
+        {
+            using (var jReader = obj.CreateReader())
+            {
+                JsonSerializer.CreateDefault().Populate(jReader, this);
+            }
+
             ReadOnlyLocked = true;
         }
     }

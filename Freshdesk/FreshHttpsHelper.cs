@@ -1,5 +1,6 @@
 ﻿using Freshdesk.Schema;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,7 +32,7 @@ namespace Freshdesk
         /// </summary>
         public static string AuthorizationKey
         {
-            get { throw new FieldAccessException("HttpHelper.AuthorizationKey.get: Not allowed to get this field. It is public write-only."); }
+            get { throw new FieldAccessException("FreshHttpHelper.AuthorizationKey.get: Not allowed to get this field. It is public write-only."); }
             set { _AuthorizationKey = value; }
         }
         private static string _AuthorizationKey;
@@ -117,6 +118,18 @@ namespace Freshdesk
 
             if (genericType == typeof(Ticket))
                 return new Ticket(json);
+            else if (genericType == typeof(IList<Ticket>))
+            {
+                JArray arr = JArray.Parse(json);
+                var resultTickets = new List<Ticket>();
+
+                foreach(JObject obj in arr.Children<JObject>())
+                {
+                    resultTickets.Add(new Ticket(obj));
+                }
+
+                return resultTickets.AsReadOnly();
+            }
 
             throw new NotSupportedException("FreshHttpsHelper.DoRequest<T>: Type '" + genericType.Name + "' is not supported for deserialization.");
         }

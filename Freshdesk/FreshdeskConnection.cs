@@ -43,7 +43,7 @@ namespace Freshdesk
         /// <summary>
         /// The Regex rule to use when validating the connection hostname.
         /// </summary>
-        public static readonly Regex UriRule = new Regex("^[[:alnum:]]+\\.freshdesk\\.com$");
+        public static readonly Regex UriRule = new Regex("^[A-Za-z0-9]+\\.freshdesk\\.com$");
 
 
         /// <summary>
@@ -64,13 +64,13 @@ namespace Freshdesk
             // Validate the URI
             if (connUri.Scheme != "https" ||
                 !UriRule.IsMatch(connUri.Host) ||
-                !String.IsNullOrEmpty(connUri.PathAndQuery))
+                connUri.PathAndQuery != "/")
                 throw new ArgumentException("FreshdeskConnection.New: Invalid connection URI provided. URI must be in the form https://*.freshdesk.com.\n\nSee https://developer.freshdesk.com/api/#authentication for details.");
 
             ConnectionUri = connUri;
 
             // Force TLS 1.1 or higher. Anything lower is deprecated in the Freshdesk API as of 2016-09-30
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11;
         }
 
 
@@ -132,7 +132,7 @@ namespace Freshdesk
             if (page < 1)
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetTicketsByCompany: Parameter 'page' out of range, value must be 1 or greater.");
 
-            var result = (Ticket[]) await FreshHttpsHelper.DoRequest<Ticket[]>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets",
+            var result = (IList<Ticket>) await FreshHttpsHelper.DoRequest<IList<Ticket>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets",
                 "company_id=" + id.ToString() + "&page=" + page.ToString() + "&per_page=10"));
 
             return new List<Ticket>(result).AsReadOnly();

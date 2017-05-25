@@ -63,7 +63,7 @@ namespace Freshdesk.Schema
         public DateTime CreatedAt
         {
             get { return _CreatedAt; }
-            set { if (!ReadOnlyLocked) CreatedAt = value; }
+            set { if (!ReadOnlyLocked) _CreatedAt = value; }
         }
         private DateTime _CreatedAt;
 

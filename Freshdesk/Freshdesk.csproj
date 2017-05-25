@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Freshdesk</RootNamespace>
     <AssemblyName>Freshdesk</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -61,12 +63,11 @@
     <Compile Include="CreateCustomerRequest.cs" />
     <Compile Include="CreateTicketInfo.cs" />
     <Compile Include="CreateTicketRequest.cs" />
-    <Compile Include="ErrorInfo.cs" />
-    <Compile Include="GetErrorResponse.cs" />
     <Compile Include="GetTimeResponse.cs" />
     <Compile Include="GetUserResponse.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HelpdeskError.cs" />
+    <Compile Include="FreshHttpsHelper.cs" />
     <Compile Include="Schema\Ticket.cs" />
     <Compile Include="Schema\TicketPriority.cs" />
     <Compile Include="Schema\TicketSource.cs" />
@@ -74,7 +75,7 @@
     <Compile Include="Customer.cs" />
     <Compile Include="GetCustomerResponse.cs" />
     <Compile Include="GetTicketResponse.cs" />
-    <Compile Include="Ticket.cs" />
+    <Compile Include="TicketOld.cs" />
     <Compile Include="FreshdeskConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GetTicketListItemResponse.cs" />

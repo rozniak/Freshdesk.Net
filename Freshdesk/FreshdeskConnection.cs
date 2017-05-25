@@ -81,7 +81,10 @@ namespace Freshdesk
         /// <returns>The resultant Ticket object that has been finalized on Freshdesk.</returns>
         public async Task<Ticket> CreateTicket(Ticket ticket)
         {
-            // TODO: Code this
+            if (ticket == null)
+                throw new ArgumentNullException("FreshdeskConnection.CreateTicket: Parameter 'ticket' cannot be null.");
+
+            //return (Ticket) await FreshHttpsHelper.DoRequest<Ticket>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets"), "POST", JsonConvert.SerializeObject(ticket));
             return null;
         }
 
@@ -97,6 +100,35 @@ namespace Freshdesk
         }
 
         /// <summary>
+        /// Gets a list of tickets from the global ticket list.
+        /// </summary>
+        /// <returns>A list of tickets from the first page, with a maximum of 30 results, as an IList&lt;Ticket&gt; collection.</returns>
+        public async Task<IList<Ticket>> GetAllTickets()
+        {
+            return await GetAllTickets(1, 30);
+        }
+
+        /// <summary>
+        /// Gets a list of tickets from the global ticket list.
+        /// </summary>
+        /// <param name="page">The page number.</param>
+        /// <param name="quantity">The max number of tickets to return on a given page. The maximum Freshdesk will accept is 100.</param>
+        /// <returns>A list of tickets from the specified page, with a specified maximum amount of results, as an IList&lt;Ticket&gt; collection.</returns>
+        public async Task<IList<Ticket>> GetAllTickets(int page, int quantity = 30)
+        {
+            if (quantity < 1 || quantity > 100)
+                throw new ArgumentOutOfRangeException("FreshdeskConnection.GetAllTickets: Parameter 'quantity' out of range, accepted values are between 1 and 100 inclusive.");
+
+            if (page < 1)
+                throw new ArgumentOutOfRangeException("FreshdeskConnection.GetAllTickets: Parameter 'page' out of range, value must be 1 or greater.");
+
+            var result = (IList<Ticket>)await FreshHttpsHelper.DoRequest<IList<Ticket>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets",
+                "page=" + page.ToString() + "&per_page=" + quantity.ToString()));
+
+            return new List<Ticket>(result).AsReadOnly();
+        }
+
+        /// <summary>
         /// Gets a ticket from the helpdesk by its ID.
         /// </summary>
         /// <param name="id">The ID of the ticket.</param>
@@ -106,7 +138,7 @@ namespace Freshdesk
             // TODO: Code this
             return null;
         }
-
+        
         /// <summary>
         /// Gets a list of tickets from a company on the helpdesk by its ID.
         /// </summary>
@@ -172,7 +204,7 @@ namespace Freshdesk
   //          {
   //              throw new ArgumentNullException("createTicketRequest");
   //          }
-  //          return FreshHttpsHelper.DoRequest<GetTicketResponse>(FreshHttpsHelper.UriForPath(ConnectionUri, "/helpdesk/tickets.json"), "POST", JsonConvert.SerializeObject(createTicketRequest));
+  //          
   //      }
 
   //      /// <summary>

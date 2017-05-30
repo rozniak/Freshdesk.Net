@@ -69,6 +69,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HelpdeskError.cs" />
     <Compile Include="FreshHttpsHelper.cs" />
+    <Compile Include="Schema\Company.cs" />
     <Compile Include="Schema\Ticket.cs" />
     <Compile Include="Schema\TicketPriority.cs" />
     <Compile Include="Schema\TicketSource.cs" />

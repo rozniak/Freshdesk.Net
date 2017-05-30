@@ -1,4 +1,16 @@
-﻿using Freshdesk.Schema;
+﻿/*
+ * Freshdesk.FreshHttpHelper -- Freshdesk HTTPS Communication Subsystem
+ *
+ * This source-code is part of the Freshdesk API for C# library by Rory Fewell (rozniak) of Oddmatics for Agile ICT for Education Ltd.:
+ * <<https://oddmatics.uk>>
+ * <<http://www.agileict.co.uk>>
+ * 	
+ * Copyright (C) 2017 Oddmatics
+ * 	
+ * Sharing, editing and general licence term information can be found inside of the "LICENSE.MD" file that should be located in the root of this project's directory structure.
+ */
+
+using Freshdesk.Schema;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -130,6 +142,18 @@ namespace Freshdesk
 
                 return resultTickets.AsReadOnly();
             }
+            else if (genericType == typeof(Company))
+                return new Company(json);
+            else if (genericType == typeof(IList<Company>))
+            {
+                JArray arr = JArray.Parse(json);
+                var resultCompanies = new List<Company>();
+
+                foreach(JObject obj in arr.Children<JObject>())
+                {
+                    resultCompanies.Add(new Company(obj));
+                }
+            }
 
             throw new NotSupportedException("FreshHttpsHelper.DoRequest<T>: Type '" + genericType.Name + "' is not supported for deserialization.");
         }
@@ -177,6 +201,13 @@ namespace Freshdesk
             return result;
         }
         
+        /// <summary>
+        /// Builds a URI using the specified parameters.
+        /// </summary>
+        /// <param name="baseUri">The base URI.</param>
+        /// <param name="path">The URI path.</param>
+        /// <param name="query">The URI query string.</param>
+        /// <returns>The final constructed Uri object.</returns>
         public static Uri UriForPath(Uri baseUri, string path, string query = null)
         {
             UriBuilder uriBuilder = new UriBuilder(baseUri);

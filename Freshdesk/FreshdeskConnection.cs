@@ -1,34 +1,18 @@
 ﻿/*
- * Copyright 2015 Beckersoft, Inc.
+ * Freshdesk.FreshdeskConnection -- Main Freshdesk API Implementation
  *
- * Author(s):
- *  John Becker (john@beckersoft.com)
- *  Oleg Shevchenko (shevchenko.oleg@outlook.com)
- *  Joseph Poh (github user jozsurf)
- *  (github user ninjacarr)
- *  (github user sloppypointless)
- *  
- *  Some web code is derived from work authored by:
- * 	Gonzalo Paniagua Javier (gonzalo@xamarin.com)
+ * This source-code is part of the Freshdesk API for C# library by Rory Fewell (rozniak) of Oddmatics for Agile ICT for Education Ltd.:
+ * <<https://oddmatics.uk>>
+ * <<http://www.agileict.co.uk>>
  * 	
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright (C) 2017 Oddmatics
+ * 	
+ * Sharing, editing and general licence term information can be found inside of the "LICENSE.MD" file that should be located in the root of this project's directory structure.
  */
 
 using Freshdesk.Schema;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -100,32 +84,33 @@ namespace Freshdesk
         }
 
         /// <summary>
-        /// Gets a list of tickets from the global ticket list.
+        /// Gets a list of companies from the helpdesk.
         /// </summary>
-        /// <returns>A list of tickets from the first page, with a maximum of 30 results, as an IList&lt;Ticket&gt; collection.</returns>
-        public async Task<IList<Ticket>> GetAllTickets()
+        /// <param name="page">The page number.</param>
+        /// <param name="quantity">The max number of companies to return on a given page. The maximum Freshdesk will accept is 100.</param>
+        /// <returns>A list of companies from the specified page, with a specified maximum amount of results, as an IList&lt;Company&gt; collection.</returns>
+        public async Task<IList<Company>> GetCompanies(int page, int quantity = 30)
         {
-            return await GetAllTickets(1, 30);
+            if (quantity < 1 || quantity > 100)
+                throw new ArgumentOutOfRangeException("FreshdeskConnection.GetCompanies: Parameter 'quantity' out of range, accepted values are between 1 and 100 inclusive.");
+
+            if (page < 1)
+                throw new ArgumentOutOfRangeException("FreshdeskConnection.GetCompanies: Parameter 'page' out of range, value must be 1 or greater.");
+
+            var result = (IList<Company>)await FreshHttpsHelper.DoRequest<IList<Ticket>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/companies",
+                "page=" + page.ToString() + "&per_page=" + quantity.ToString()));
+
+            return new List<Company>(result).AsReadOnly();
         }
 
         /// <summary>
-        /// Gets a list of tickets from the global ticket list.
+        /// Gets a company from the helpdesk by its ID.
         /// </summary>
-        /// <param name="page">The page number.</param>
-        /// <param name="quantity">The max number of tickets to return on a given page. The maximum Freshdesk will accept is 100.</param>
-        /// <returns>A list of tickets from the specified page, with a specified maximum amount of results, as an IList&lt;Ticket&gt; collection.</returns>
-        public async Task<IList<Ticket>> GetAllTickets(int page, int quantity = 30)
+        /// <param name="id">The ID of the company.</param>
+        /// <returns>A Company object populated with company data retrieved from Freshdesk if the ID was found, null otherwise.</returns>
+        public async Task<Company> GetCompany(long id)
         {
-            if (quantity < 1 || quantity > 100)
-                throw new ArgumentOutOfRangeException("FreshdeskConnection.GetAllTickets: Parameter 'quantity' out of range, accepted values are between 1 and 100 inclusive.");
-
-            if (page < 1)
-                throw new ArgumentOutOfRangeException("FreshdeskConnection.GetAllTickets: Parameter 'page' out of range, value must be 1 or greater.");
-
-            var result = (IList<Ticket>)await FreshHttpsHelper.DoRequest<IList<Ticket>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets",
-                "page=" + page.ToString() + "&per_page=" + quantity.ToString()));
-
-            return new List<Ticket>(result).AsReadOnly();
+            return (Company)await FreshHttpsHelper.DoRequest<Company>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/companies/" + id.ToString()));
         }
 
         /// <summary>
@@ -133,20 +118,29 @@ namespace Freshdesk
         /// </summary>
         /// <param name="id">The ID of the ticket.</param>
         /// <returns>A Ticket object populated with ticket data retrieved from Freshdesk if the ID was found, null otherwise.</returns>
-        public async Task<Ticket> GetTicketById(long id)
+        public async Task<Ticket> GetTicket(long id)
         {
-            // TODO: Code this
-            return null;
+            return (Ticket)await FreshHttpsHelper.DoRequest<Ticket>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets/" + id.ToString(), "include=company,requester"));
         }
-        
+
         /// <summary>
-        /// Gets a list of tickets from a company on the helpdesk by its ID.
+        /// Gets a list of tickets from the helpdesk ticket list.
         /// </summary>
-        /// <param name="id">The company ID.</param>
-        /// <returns>A list of the company's tickets from the first page, with a maximum of 30 results, as an IList&lt;Ticket&gt; collection.</returns>
-        public async Task<IList<Ticket>> GetTicketsByCompany(long id)
+        /// <param name="page">The page number.</param>
+        /// <param name="quantity">The max number of tickets to return on a given page. The maximum Freshdesk will accept is 100.</param>
+        /// <returns>A list of tickets from the specified page, with a specified maximum amount of results, as an IList&lt;Ticket&gt; collection.</returns>
+        public async Task<IList<Ticket>> GetTickets(int page, int quantity = 30)
         {
-            return await GetTicketsByCompany(id, 1, 30);
+            if (quantity < 1 || quantity > 100)
+                throw new ArgumentOutOfRangeException("FreshdeskConnection.GetTickets: Parameter 'quantity' out of range, accepted values are between 1 and 100 inclusive.");
+
+            if (page < 1)
+                throw new ArgumentOutOfRangeException("FreshdeskConnection.GetTickets: Parameter 'page' out of range, value must be 1 or greater.");
+
+            var result = (IList<Ticket>)await FreshHttpsHelper.DoRequest<IList<Ticket>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets",
+                "page=" + page.ToString() + "&per_page=" + quantity.ToString()));
+
+            return new List<Ticket>(result).AsReadOnly();
         }
 
         /// <summary>

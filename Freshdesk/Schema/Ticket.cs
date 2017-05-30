@@ -1,4 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿/*
+ * Freshdesk.Schema.Ticket -- Freshdesk Ticket
+ *
+ * This source-code is part of the Freshdesk API for C# library by Rory Fewell (rozniak) of Oddmatics for Agile ICT for Education Ltd.:
+ * <<https://oddmatics.uk>>
+ * <<http://www.agileict.co.uk>>
+ * 	
+ * Copyright (C) 2017 Oddmatics
+ * 	
+ * Sharing, editing and general licence term information can be found inside of the "LICENSE.MD" file that should be located in the root of this project's directory structure.
+ */
+
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -9,7 +21,7 @@ namespace Freshdesk.Schema
     /// Represents a Freshdesk ticket.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public class Ticket
+    public sealed class Ticket
     {
         // TODO: Add attachments property
 
@@ -20,7 +32,7 @@ namespace Freshdesk.Schema
         public string AssignedAgentId { get; set; }
 
         /// <summary>
-        /// Gets or sets the ID of the company to which this ticket belongs.
+        /// Gets the ID of the company to which this ticket belongs.
         /// 
         /// This property is read-only.
         /// </summary>
@@ -28,7 +40,7 @@ namespace Freshdesk.Schema
         /// Technically this property is not read-only if you have the Estate plan, however I have no way of testing the
         /// Multiple Companies feature.
         /// </remarks>
-        [JsonProperty("company_id")]
+        [JsonProperty("company_id", NullValueHandling = NullValueHandling.Ignore)]
         public long CompanyId
         {
             get { return _CompanyId; }
@@ -43,7 +55,7 @@ namespace Freshdesk.Schema
         public string[] CopiedInRecipients { get; set; }
 
         /// <summary>
-        /// Gets or sets the email address(es) added while replying to a ticket.
+        /// Gets the email address(es) added while replying to a ticket.
         /// 
         /// This property is read-only.
         /// </summary>
@@ -56,7 +68,7 @@ namespace Freshdesk.Schema
         private string[] _CopiedInRecipientsOnReply;
 
         /// <summary>
-        /// Gets or sets the ticket creation timestamp.
+        /// Gets the ticket's creation timestamp.
         /// 
         /// This property is read-only.
         /// </summary>
@@ -75,7 +87,9 @@ namespace Freshdesk.Schema
         public Dictionary<string, object> CustomFields { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the ticket has been deleted/trashed.
+        /// Gets whether the ticket has been deleted/trashed.
+        /// 
+        /// This property is read-only.
         /// </summary>
         /// <remarks>
         /// Deleted tickets will not be displayed in any views except the "deleted" filter.
@@ -89,7 +103,7 @@ namespace Freshdesk.Schema
         private bool _Deleted;
 
         /// <summary>
-        /// Gets or sets the content of the ticket in plain-text.
+        /// Gets the content of the ticket in plain-text.
         /// 
         /// This property is read-only.
         /// </summary>
@@ -144,7 +158,7 @@ namespace Freshdesk.Schema
         public DateTime FirstResponseDueTime { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the ticket has been escalated as the result of first response time being breached.
+        /// Gets whether the ticket has been escalated as the result of first response time being breached.
         /// 
         /// This property is read-only.
         /// </summary>
@@ -157,7 +171,9 @@ namespace Freshdesk.Schema
         private bool _FirstResponseEscalated;
 
         /// <summary>
-        /// Gets or sets the email address(es) added while forwarding a ticket.
+        /// Gets the email address(es) added while forwarding a ticket.
+        /// 
+        /// This property is read-only.
         /// </summary>
         [JsonProperty("fwd_emails", NullValueHandling = NullValueHandling.Ignore)]
         public string[] ForwardeeEmails
@@ -174,7 +190,7 @@ namespace Freshdesk.Schema
         public long GroupId { get; set; }
 
         /// <summary>
-        /// Gets or sets the unique ID of the ticket.
+        /// Gets the unique ID of the ticket.
         /// 
         /// This property is read-only.
         /// </summary>
@@ -187,7 +203,7 @@ namespace Freshdesk.Schema
         private long _Id;
 
         /// <summary>
-        /// Gets or sets whether the ticket has been escalated for any reason.
+        /// Gets whether the ticket has been escalated for any reason.
         /// 
         /// This property is read-only.
         /// </summary>
@@ -221,7 +237,7 @@ namespace Freshdesk.Schema
         public long ProductId { get; set; }
 
         /// <summary>
-        /// Gets or sets the email addresses to which the ticket was originally sent.
+        /// Gets the email addresses to which the ticket was originally sent.
         /// 
         /// This property is read-only.
         /// </summary>
@@ -252,7 +268,7 @@ namespace Freshdesk.Schema
         public TicketSource Source { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the ticket has been marked as spam.
+        /// Gets whether the ticket has been marked as spam.
         /// 
         /// This property is read-only.
         /// </summary>
@@ -298,7 +314,7 @@ namespace Freshdesk.Schema
         public string Type { get; set; }
 
         /// <summary>
-        /// Gets or sets the ticket updated timestamp.
+        /// Gets the ticket's last updated timestamp.
         /// 
         /// This property is read-only.
         /// </summary>
@@ -312,7 +328,7 @@ namespace Freshdesk.Schema
 
 
         /// <summary>
-        /// Gets or sets whether the read-only properties are locked.
+        /// The value indicating whether the read-only properties are locked.
         /// </summary>
         private bool ReadOnlyLocked { get; set; }
 

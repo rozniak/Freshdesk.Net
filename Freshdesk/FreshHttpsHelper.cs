@@ -127,7 +127,7 @@ namespace Freshdesk
         {
             var json = await DoRequest(uri, method, body);
             Type genericType = typeof(T);
-
+            
             if (genericType == typeof(Ticket))
                 return new Ticket(json);
             else if (genericType == typeof(IList<Ticket>))
@@ -153,6 +153,8 @@ namespace Freshdesk
                 {
                     resultCompanies.Add(new Company(obj));
                 }
+
+                return resultCompanies.AsReadOnly();
             }
 
             throw new NotSupportedException("FreshHttpsHelper.DoRequest<T>: Type '" + genericType.Name + "' is not supported for deserialization.");

@@ -138,7 +138,7 @@ namespace Freshdesk
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetTickets: Parameter 'page' out of range, value must be 1 or greater.");
 
             var result = (IList<Ticket>)await FreshHttpsHelper.DoRequest<IList<Ticket>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets",
-                "page=" + page.ToString() + "&per_page=" + quantity.ToString()));
+                "page=" + page.ToString() + "&per_page=" + quantity.ToString() + "&updated_since=2000-01-01T01:00:00Z"));
 
             return new List<Ticket>(result).AsReadOnly();
         }
@@ -159,7 +159,7 @@ namespace Freshdesk
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetTicketsByCompany: Parameter 'page' out of range, value must be 1 or greater.");
 
             var result = (IList<Ticket>) await FreshHttpsHelper.DoRequest<IList<Ticket>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets",
-                "company_id=" + id.ToString() + "&page=" + page.ToString() + "&per_page=" + quantity.ToString()));
+                "company_id=" + id.ToString() + "&page=" + page.ToString() + "&per_page=" + quantity.ToString() + "&updated_since=2000-01-01T01:00:00Z"));
 
             return new List<Ticket>(result).AsReadOnly();
         }

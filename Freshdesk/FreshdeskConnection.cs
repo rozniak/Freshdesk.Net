@@ -114,6 +114,36 @@ namespace Freshdesk
         }
 
         /// <summary>
+        /// Gets a contact from the helpdesk by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the contact.</param>
+        /// <returns>A Contact object populated with contact data retrieved from Freshdesk if the ID was found, null otherwise.</returns>
+        public async Task<Contact> GetContact(long id)
+        {
+            return (Contact)await FreshHttpsHelper.DoRequest<Contact>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/contacts/" + id.ToString()));
+        }
+
+        /// <summary>
+        /// Gets a list of contacts from the helpdesk.
+        /// </summary>
+        /// <param name="page">The page number.</param>
+        /// <param name="quantity">The max number of contacts to return on a given page. The maximum Freshdesk will accept is 100.</param>
+        /// <returns>A list of contacts from the specified page, with a specified maximum amount of results, as an IList&lt;Contact&gt; collection.</returns>
+        public async Task<IList<Contact>> GetContacts(int page, int quantity = 30)
+        {
+            if (quantity < 1 || quantity > 100)
+                throw new ArgumentOutOfRangeException("FreshdeskConnection.GetContacts: Parameter 'quantity' out of range, accepted values are between 1 and 100 inclusive.");
+
+            if (page < 1)
+                throw new ArgumentOutOfRangeException("FreshdeskConnection.GetContacts: Parameter 'page' out of range, value must be 1 or greater.");
+
+            var result = (IList<Contact>)await FreshHttpsHelper.DoRequest<IList<Contact>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/contacts",
+                "page=" + page.ToString() + "&per_page=" + quantity.ToString()));
+
+            return new List<Contact>(result).AsReadOnly();
+        }
+
+        /// <summary>
         /// Gets a ticket from the helpdesk by its ID.
         /// </summary>
         /// <param name="id">The ID of the ticket.</param>
@@ -162,6 +192,26 @@ namespace Freshdesk
                 "company_id=" + id.ToString() + "&page=" + page.ToString() + "&per_page=" + quantity.ToString() + "&updated_since=2000-01-01T01:00:00Z"));
 
             return new List<Ticket>(result).AsReadOnly();
+        }
+
+        /// <summary>
+        /// Gets a list of time entries from the helpdesk time entries list.
+        /// </summary>
+        /// <param name="page">The page number.</param>
+        /// <param name="quantity">The max number of time enrties to return on a given page. The maximum Freshdesk will accept is 100.</param>
+        /// <returns>A list of the company's time entries from the specified page, with a specified maximum amount of results, as an IList&lt;TicketTimeEntry&gt; collection.</returns>
+        public async Task<IList<TicketTimeEntry>> GetTimeEntries(int page, int quantity = 30)
+        {
+            if (quantity < 1 || quantity > 100)
+                throw new ArgumentOutOfRangeException("FreshdeskConnection.GetTimeEntries: Parameter 'quantity' out of range, accepted values are between 1 and 100 inclusive.");
+
+            if (page < 1)
+                throw new ArgumentOutOfRangeException("FreshdeskConnection.GetTimeEntries: Parameter 'page' out of range, value must be 1 or greater.");
+
+            var result = (IList<TicketTimeEntry>)await FreshHttpsHelper.DoRequest<IList<TicketTimeEntry>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/time_entries",
+                "page=" + page.ToString() + "&per_page=" + quantity.ToString() + "&executed_after=2000-01-01T01:00:00Z"));
+
+            return new List<TicketTimeEntry>(result).AsReadOnly();
         }
 
 

@@ -70,9 +70,12 @@
     <Compile Include="HelpdeskError.cs" />
     <Compile Include="FreshHttpsHelper.cs" />
     <Compile Include="Schema\Company.cs" />
+    <Compile Include="Schema\Contact.cs" />
+    <Compile Include="Schema\ContactAvatar.cs" />
     <Compile Include="Schema\Ticket.cs" />
     <Compile Include="Schema\TicketPriority.cs" />
     <Compile Include="Schema\TicketSource.cs" />
+    <Compile Include="Schema\TicketTimeEntry.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="GetCustomerResponse.cs" />

@@ -127,7 +127,9 @@ namespace Freshdesk
         {
             var json = await DoRequest(uri, method, body);
             Type genericType = typeof(T);
-            
+
+            // TODO: Replace this tower of IF statements
+            //
             if (genericType == typeof(Ticket))
                 return new Ticket(json);
             else if (genericType == typeof(IList<Ticket>))
@@ -135,7 +137,7 @@ namespace Freshdesk
                 JArray arr = JArray.Parse(json);
                 var resultTickets = new List<Ticket>();
 
-                foreach(JObject obj in arr.Children<JObject>())
+                foreach (JObject obj in arr.Children<JObject>())
                 {
                     resultTickets.Add(new Ticket(obj));
                 }
@@ -149,12 +151,40 @@ namespace Freshdesk
                 JArray arr = JArray.Parse(json);
                 var resultCompanies = new List<Company>();
 
-                foreach(JObject obj in arr.Children<JObject>())
+                foreach (JObject obj in arr.Children<JObject>())
                 {
                     resultCompanies.Add(new Company(obj));
                 }
 
                 return resultCompanies.AsReadOnly();
+            }
+            else if (genericType == typeof(Contact))
+                return new Contact(json);
+            else if (genericType == typeof(IList<Contact>))
+            {
+                JArray arr = JArray.Parse(json);
+                var resultContacts = new List<Contact>();
+
+                foreach (JObject obj in arr.Children<JObject>())
+                {
+                    resultContacts.Add(new Contact(obj));
+                }
+
+                return resultContacts.AsReadOnly();
+            }
+            else if (genericType == typeof(TicketTimeEntry))
+                return new TicketTimeEntry(json);
+            else if (genericType == typeof(IList<TicketTimeEntry>))
+            {
+                JArray arr = JArray.Parse(json);
+                var resultTimeEntries = new List<TicketTimeEntry>();
+
+                foreach (JObject obj in arr.Children<JObject>())
+                {
+                    resultTimeEntries.Add(new TicketTimeEntry(obj));
+                }
+
+                return resultTimeEntries.AsReadOnly();
             }
 
             throw new NotSupportedException("FreshHttpsHelper.DoRequest<T>: Type '" + genericType.Name + "' is not supported for deserialization.");

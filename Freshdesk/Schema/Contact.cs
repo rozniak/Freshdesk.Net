@@ -59,6 +59,7 @@ namespace Freshdesk.Schema
         /// 
         /// This property is read-only.
         /// </summary>
+        [JsonProperty("company_id", NullValueHandling = NullValueHandling.Ignore)]
         public long CompanyId
         {
             get { return _CompanyId; }
@@ -206,6 +207,7 @@ namespace Freshdesk.Schema
         public Contact(string json)
         {
             JsonConvert.PopulateObject(json, this);
+
             ReadOnlyLocked = true;
         }
 

@@ -138,6 +138,10 @@ namespace Freshdesk.Schema
         public Agent(string json)
         {
             JsonConvert.PopulateObject(json, this);
+            JObject jObj = (JObject)JObject.Parse(json)["contact"];
+
+            Contact = new Contact(jObj);
+
             ReadOnlyLocked = true;
         }
 
@@ -151,6 +155,8 @@ namespace Freshdesk.Schema
             {
                 JsonSerializer.CreateDefault().Populate(jReader, this);
             }
+
+            Contact = new Contact((JObject)obj["contact"]);
 
             ReadOnlyLocked = true;
         }

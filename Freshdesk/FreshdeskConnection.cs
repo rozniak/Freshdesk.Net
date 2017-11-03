@@ -84,6 +84,36 @@ namespace Freshdesk
         }
 
         /// <summary>
+        /// Gets an agent from the helpdesk by their ID.
+        /// </summary>
+        /// <param name="id">The ID of the agent.</param>
+        /// <returns>An Agent object populated with company data retrieved from Freshdesk if the ID was found, null otherwise.</returns>
+        public async Task<Agent> GetAgent(long id)
+        {
+            return (Agent)await FreshHttpsHelper.DoRequest<Agent>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/agents/" + id.ToString()));
+        }
+
+        /// <summary>
+        /// Gets a list of agents from the helpdesk.
+        /// </summary>
+        /// <param name="page">The page number.</param>
+        /// <param name="quantity">The max number of agents to return on a given page. The maximum Freshdesk will accept is 100.</param>
+        /// <returns>A list of agents from the specified page, with a specified maximum amount of results, as an IList&lt;Agent&gt; collection.</returns>
+        public async Task<IList<Agent>> GetAgents(int page, int quantity = 30)
+        {
+            if (quantity < 1 || quantity > 100)
+                throw new ArgumentOutOfRangeException("FreshdeskConnection.GetAgents: Parameter 'quantity' out of range, accepted values are between 1 and 100 inclusive.");
+
+            if (page < 1)
+                throw new ArgumentOutOfRangeException("FreshdeskConnection.GetAgents: Parameter 'page' out of range, value must be 1 or greater.");
+
+            var result = (IList<Agent>)await FreshHttpsHelper.DoRequest<IList<Agent>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/agents",
+                "page=" + page.ToString() + "&per_page=" + quantity.ToString()));
+
+            return new List<Agent>(result).AsReadOnly();
+        }
+
+        /// <summary>
         /// Gets a list of companies from the helpdesk.
         /// </summary>
         /// <param name="page">The page number.</param>
@@ -114,7 +144,7 @@ namespace Freshdesk
         }
 
         /// <summary>
-        /// Gets a contact from the helpdesk by its ID.
+        /// Gets a contact from the helpdesk by their ID.
         /// </summary>
         /// <param name="id">The ID of the contact.</param>
         /// <returns>A Contact object populated with contact data retrieved from Freshdesk if the ID was found, null otherwise.</returns>

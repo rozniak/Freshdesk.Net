@@ -186,6 +186,20 @@ namespace Freshdesk
 
                 return resultTimeEntries.AsReadOnly();
             }
+            else if (genericType == typeof(Agent))
+                return new Agent(json);
+            else if (genericType == typeof(IList<Agent>))
+            {
+                JArray arr = JArray.Parse(json);
+                var resultAgents = new List<Agent>();
+
+                foreach (JObject obj in arr.Children<JObject>())
+                {
+                    resultAgents.Add(new Agent(obj));
+                }
+
+                return resultAgents.AsReadOnly();
+            }
 
             throw new NotSupportedException("FreshHttpsHelper.DoRequest<T>: Type '" + genericType.Name + "' is not supported for deserialization.");
         }

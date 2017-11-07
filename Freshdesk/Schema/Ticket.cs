@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Freshdesk.Schema
 {
@@ -31,89 +32,51 @@ namespace Freshdesk.Schema
         [JsonProperty("responder_id")]
         public string AssignedAgentId { get; set; }
 
+
         /// <summary>
         /// Gets the ID of the company to which this ticket belongs.
-        /// 
-        /// This property is read-only.
         /// </summary>
         /// <remarks>
         /// Technically this property is not read-only if you have the Estate plan, however I have no way of testing the
         /// Multiple Companies feature.
         /// </remarks>
         [JsonProperty("company_id", NullValueHandling = NullValueHandling.Ignore)]
-        public long CompanyId
-        {
-            get { return _CompanyId; }
-            set { if (!ReadOnlyLocked) _CompanyId = value; }
-        }
-        private long _CompanyId;
+        public long CompanyId { get; private set; }
+        
 
         /// <summary>
         /// Gets or sets the email address(es) added in the 'cc' field of the incoming ticket email.
         /// </summary>
         [JsonProperty("cc_emails", NullValueHandling = NullValueHandling.Ignore)]
         public string[] CopiedInRecipients { get; set; }
-
+        
+        
         /// <summary>
         /// Gets the email address(es) added while replying to a ticket.
-        /// 
-        /// This property is read-only.
         /// </summary>
         [JsonProperty("reply_cc_emails", NullValueHandling = NullValueHandling.Ignore)]
-        public string[] CopiedInRecipientsOnReply
-        {
-            get { return _CopiedInRecipientsOnReply; }
-            set { if (!ReadOnlyLocked) _CopiedInRecipientsOnReply = value; }
-        }
-        private string[] _CopiedInRecipientsOnReply;
+        public string[] CopiedInRecipientsOnReply { get; private set; }
+
 
         /// <summary>
-        /// Gets the ticket's creation timestamp.
-        /// 
-        /// This property is read-only.
+        /// Gets this ticket's creation timestamp.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime CreatedAt
-        {
-            get { return _CreatedAt; }
-            set { if (!ReadOnlyLocked) _CreatedAt = value; }
-        }
-        private DateTime _CreatedAt;
+        public DateTime CreatedAt { get; private set; }
+
 
         /// <summary>
-        /// Gets or sets the key-value pairs containing the names and values of custom fields.
+        /// Gets the key-value pairs containing the names and values of custom fields.
         /// </summary>
         [JsonProperty("custom_fields")]
-        public Dictionary<string, object> CustomFields { get; set; }
-
-        /// <summary>
-        /// Gets whether the ticket has been deleted/trashed.
-        /// 
-        /// This property is read-only.
-        /// </summary>
-        /// <remarks>
-        /// Deleted tickets will not be displayed in any views except the "deleted" filter.
-        /// </remarks>
-        [JsonProperty("deleted")]
-        public bool Deleted
-        {
-            get { return _Deleted; }
-            set { if (!ReadOnlyLocked) _Deleted = value; }
-        }
-        private bool _Deleted;
+        public Dictionary<string, object> CustomFields { get; private set; }
+        
 
         /// <summary>
         /// Gets the content of the ticket in plain-text.
-        /// 
-        /// This property is read-only.
         /// </summary>
         [JsonProperty("description_text")]
-        public string Description
-        {
-            get { return _Description; }
-            set { if (!ReadOnlyLocked) _Description = value; }
-        }
-        private string _Description;
+        public string Description { get; private set; }
 
         /// <summary>
         /// Gets or sets the HTML content of the ticket.
@@ -159,29 +122,15 @@ namespace Freshdesk.Schema
 
         /// <summary>
         /// Gets whether the ticket has been escalated as the result of first response time being breached.
-        /// 
-        /// This property is read-only.
         /// </summary>
         [JsonProperty("fr_escalated")]
-        public bool FirstResponseEscalated
-        {
-            get { return _FirstResponseEscalated; }
-            set { if (!ReadOnlyLocked) _FirstResponseEscalated = value; }
-        }
-        private bool _FirstResponseEscalated;
+        public bool FirstResponseEscalated { get; private set; }
 
         /// <summary>
         /// Gets the email address(es) added while forwarding a ticket.
-        /// 
-        /// This property is read-only.
         /// </summary>
         [JsonProperty("fwd_emails", NullValueHandling = NullValueHandling.Ignore)]
-        public string[] ForwardeeEmails
-        {
-            get { return _ForwardeeEmails; }
-            set { if (!ReadOnlyLocked) _ForwardeeEmails = value; }
-        }
-        private string[] _ForwardeeEmails;
+        public string[] ForwardeeEmails { get; private set; }
 
         /// <summary>
         /// Gets or sets the ID of the group to which the ticket has been assigned.
@@ -191,29 +140,26 @@ namespace Freshdesk.Schema
 
         /// <summary>
         /// Gets the unique ID of the ticket.
-        /// 
-        /// This property is read-only.
         /// </summary>
         [JsonProperty("id")]
-        public long Id
-        {
-            get { return _Id; }
-            set { if (!ReadOnlyLocked) _Id = value; }
-        }
-        private long _Id;
+        public long Id { get; private set; }
+
+        /// <summary>
+        /// Determines whether this ticket has been deleted.
+        /// </summary>
+        /// <remarks>
+        /// Deleted tickets will not be displayed in any views except the "deleted" filter.
+        /// </remarks>
+        [JsonProperty("deleted")]
+        public bool IsDeleted { get; private set; }
+
 
         /// <summary>
         /// Gets whether the ticket has been escalated for any reason.
-        /// 
-        /// This property is read-only.
         /// </summary>
         [JsonProperty("is_escalated")]
-        public bool IsEscalated
-        {
-            get { return _IsEscalated; }
-            set { if (!ReadOnlyLocked) _IsEscalated = value; }
-        }
-        private bool _IsEscalated;
+        public bool IsEscalated { get; private set; }
+
 
         /// <summary>
         /// Gets or sets the phone number of the requester.
@@ -224,11 +170,13 @@ namespace Freshdesk.Schema
         [JsonProperty("phone")]
         public string PhoneNumber { get; set; }
 
+
         /// <summary>
         /// Gets or sets the priority of the ticket.
         /// </summary>
         [JsonProperty("priority")]
         public TicketPriority Priority { get; set; }
+
 
         /// <summary>
         /// Gets or sets the ID of the product to which the ticket is associated.
@@ -236,18 +184,13 @@ namespace Freshdesk.Schema
         [JsonProperty("product_id", NullValueHandling = NullValueHandling.Ignore)]
         public long ProductId { get; set; }
 
+
         /// <summary>
         /// Gets the email addresses to which the ticket was originally sent.
-        /// 
-        /// This property is read-only.
         /// </summary>
         [JsonProperty("to_emails", NullValueHandling = NullValueHandling.Ignore)]
-        public string[] Recipients
-        {
-            get { return _Recipients; }
-            set { if (!ReadOnlyLocked) _Recipients = value; }
-        }
-        private string[] _Recipients;
+        public string[] Recipients { get; private set; }
+
 
         /// <summary>
         /// Gets or sets the user ID of the requester.
@@ -255,11 +198,13 @@ namespace Freshdesk.Schema
         [JsonProperty("requester_id")]
         public long RequesterId { get; set; }
 
+
         /// <summary>
         /// Gets or sets the name of the requester.
         /// </summary>
         [JsonProperty("name")]
         public string RequesterName { get; set; }
+
 
         /// <summary>
         /// Gets or sets the channel through which the ticket was created.
@@ -267,18 +212,13 @@ namespace Freshdesk.Schema
         [JsonProperty("source")]
         public TicketSource Source { get; set; }
 
+
         /// <summary>
         /// Gets whether the ticket has been marked as spam.
-        /// 
-        /// This property is read-only.
         /// </summary>
         [JsonProperty("spam")]
-        public bool Spam
-        {
-            get { return _Spam;  }
-            set { if (!ReadOnlyLocked) _Spam = value; }
-        }
-        private bool _Spam;
+        public bool Spam { get; private set; }
+
 
         /// <summary>
         /// Gets or sets the status of the ticket.
@@ -286,17 +226,20 @@ namespace Freshdesk.Schema
         [JsonProperty("status")]
         public int Status { get; set; }
 
+
         /// <summary>
         /// Gets or sets the subject of the ticket.
         /// </summary>
         [JsonProperty("subject")]
         public string Subject { get; set; }
 
+
         /// <summary>
         /// Gets or sets the tags that have been associated with the ticket.
         /// </summary>
         [JsonProperty("tags")]
         public string[] Tags { get; set; }
+
 
         /// <summary>
         /// Gets or sets the Twitter handle of the requester.
@@ -307,62 +250,79 @@ namespace Freshdesk.Schema
         [JsonProperty("twitter_id")]
         public string TwitterId { get; set; }
 
+
         /// <summary>
         /// Gets or sets the issue category that describes the ticket.
         /// </summary>
         [JsonProperty("type")]
         public string Type { get; set; }
 
+
         /// <summary>
         /// Gets the ticket's last updated timestamp.
-        /// 
-        /// This property is read-only.
         /// </summary>
         [JsonProperty("updated_at")]
-        public DateTime UpdatedAt
-        {
-            get { return _UpdatedAt; }
-            set { if (!ReadOnlyLocked) _UpdatedAt = value; }
-        }
-        private DateTime _UpdatedAt;
+        public DateTime UpdatedAt { get; private set; }
 
+        
+        /// <summary>
+        /// The Freshdesk connection instance that was used to acquire this ticket.
+        /// </summary>
+        private FreshdeskConnection FreshdeskConnection { get; set; }
 
         /// <summary>
-        /// The value indicating whether the read-only properties are locked.
+        /// The conversations of this ticket retrieved from JSON.
         /// </summary>
-        private bool ReadOnlyLocked { get; set; }
+        [JsonProperty("conversations")]
+        private Conversation[] JsonConversations { get; set; }
 
 
         /// <summary>
         /// Initializes a new instance of the Ticket class.
         /// </summary>
-        public Ticket()
-        {
-            ReadOnlyLocked = true;
-        }
+        public Ticket() { }
 
         /// <summary>
         /// Initializes a new instance of the Ticket class from JSON source data.
         /// </summary>
         /// <param name="json">The JSON to deserialize from.</param>
-        public Ticket(string json)
+        /// <param name="fdConn">The Freshdesk connection used to acquire this ticket.</param>
+        public Ticket(string json, FreshdeskConnection fdConn = null)
         {
             JsonConvert.PopulateObject(json, this);
-            ReadOnlyLocked = true;
+
+            FreshdeskConnection = fdConn;
         }
 
         /// <summary>
         /// Initializes a new instance of the Ticket class from a JSON object.
         /// </summary>
         /// <param name="obj">The JSON object.</param>
-        public Ticket(JObject obj)
+        /// <param name="fdConn">The Freshdesk connection used to acquire this ticket.</param>
+        public Ticket(JObject obj, FreshdeskConnection fdConn = null)
         {
             using (var jReader = obj.CreateReader())
             {
                 JsonSerializer.CreateDefault().Populate(jReader, this);
             }
 
-            ReadOnlyLocked = true;
+            FreshdeskConnection = fdConn;
+        }
+
+
+        /// <summary>
+        /// Retrieves the conversations of this ticket.
+        /// </summary>
+        /// <returns>The conversations of this ticket as a read-only IList&lt;Conversation&gt; conversation.</returns>
+        public async Task<IList<Conversation>> GetConversations()
+        {
+            if (JsonConversations != null)
+                return JsonConversations;
+
+            if (FreshdeskConnection == null)
+                throw new InvalidOperationException("Ticket.InitializeConversations: No Freshdesk connection has been provided for this ticket.");
+            
+            return await FreshdeskConnection.GetTicketConversations(Id);
         }
     }
 }

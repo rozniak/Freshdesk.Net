@@ -30,16 +30,9 @@ namespace Freshdesk.Schema
 
         /// <summary>
         /// Gets the date/time that this agent became available.
-        /// 
-        /// This property is read-only.
         /// </summary>
         [JsonProperty("available_since", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTime AvailableSince
-        {
-            get { return _AvailableSince; }
-            set { if (!ReadOnlyLocked) _AvailableSince = value; }
-        }
-        private DateTime _AvailableSince;
+        public DateTime AvailableSince { get; private set; }
 
         /// <summary>
         /// Gets or sets the contact information of this agent.
@@ -49,16 +42,9 @@ namespace Freshdesk.Schema
 
         /// <summary>
         /// Gets the agent's creation timestamp.
-        /// 
-        /// This property is read-only.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime CreatedAt
-        {
-            get { return _CreatedAt; }
-            set { if (!ReadOnlyLocked) _CreatedAt = value; }
-        }
-        private DateTime _CreatedAt;
+        public DateTime CreatedAt { get; private set; }
 
         /// <summary>
         /// Gets or sets the group IDs associated with this agent.
@@ -74,16 +60,9 @@ namespace Freshdesk.Schema
 
         /// <summary>
         /// Gets the unique ID of the agent.
-        /// 
-        /// This property is read-only.
         /// </summary>
         [JsonProperty("id")]
-        public long Id
-        {
-            get { return _Id; }
-            set { if (!ReadOnlyLocked) _Id = value; }
-        }
-        private long _Id;
+        public long Id { get; private set; }
 
         /// <summary>
         /// Gets or sets the value that indicates whether this agent is only occasionally an agent.
@@ -105,51 +84,43 @@ namespace Freshdesk.Schema
 
         /// <summary>
         /// Gets the agent's last updated timestamp.
-        /// 
-        /// This property is read-only.
         /// </summary>
         [JsonProperty("updated_at")]
-        public DateTime UpdatedAt
-        {
-            get { return _UpdatedAt; }
-            set { if (!ReadOnlyLocked) _UpdatedAt = value; }
-        }
-        private DateTime _UpdatedAt;
+        public DateTime UpdatedAt { get; private set; }
 
 
         /// <summary>
-        /// The value indicating whether the read-only properties are locked.
+        /// The Freshdesk connection instance that was used to acquire this agent.
         /// </summary>
-        private bool ReadOnlyLocked { get; set; }
+        private FreshdeskConnection FreshdeskConnection { get; set; }
 
 
         /// <summary>
         /// Initializes a new instance of the Agent class.
         /// </summary>
-        public Agent()
-        {
-            ReadOnlyLocked = true;
-        }
+        public Agent() { }
 
         /// <summary>
         /// Initializes a new instance of the Agent class from JSON source data.
         /// </summary>
         /// <param name="json">The JSON to deserialize from.</param>
-        public Agent(string json)
+        /// <param name="fdConn">The Freshdesk connection used to acquire this agent.</param>
+        public Agent(string json, FreshdeskConnection fdConn = null)
         {
             JsonConvert.PopulateObject(json, this);
             JObject jObj = (JObject)JObject.Parse(json)["contact"];
 
             Contact = new Contact(jObj);
 
-            ReadOnlyLocked = true;
+            FreshdeskConnection = fdConn;
         }
 
         /// <summary>
         /// Initializes a new instance of the Agent class from a JSON object.
         /// </summary>
         /// <param name="obj">The JSON object.</param>
-        public Agent(JObject obj)
+        /// <param name="fdConn">The Freshdesk connection used to acquire this agent.</param>
+        public Agent(JObject obj, FreshdeskConnection fdConn = null)
         {
             using (var jReader = obj.CreateReader())
             {
@@ -158,7 +129,7 @@ namespace Freshdesk.Schema
 
             Contact = new Contact((JObject)obj["contact"]);
 
-            ReadOnlyLocked = true;
+            FreshdeskConnection = fdConn;
         }
     }
 }

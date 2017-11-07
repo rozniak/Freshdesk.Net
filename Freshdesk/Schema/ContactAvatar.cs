@@ -11,9 +11,7 @@
  */
 
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 
 namespace Freshdesk.Schema
 {
@@ -24,10 +22,10 @@ namespace Freshdesk.Schema
     public sealed class ContactAvatar
     {
         /// <summary>
-        /// Gets or sets the creation date of this avatar.
+        /// Gets the creation date of this avatar.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; private set; }
 
         /// <summary>
         /// Gets or sets the MIME content type of this avatar.
@@ -60,10 +58,10 @@ namespace Freshdesk.Schema
         public int Size { get; set; }
 
         /// <summary>
-        /// Gets or sets the last updated date of this avatar.
+        /// Gets the last updated date of this avatar.
         /// </summary>
         [JsonProperty("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; private set; }
 
         /// <summary>
         /// Gets the source URL of this avatar.

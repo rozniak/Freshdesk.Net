@@ -25,16 +25,9 @@ namespace Freshdesk.Schema
     {
         /// <summary>
         /// Gets whether this contact is active.
-        /// 
-        /// This property is read-only.
         /// </summary>
         [JsonProperty("active")]
-        public bool Active
-        {
-            get { return _Active; }
-            set { if (!ReadOnlyLocked) _Active = value; }
-        }
-        private bool _Active;
+        public bool Active { get; private set; }
 
         /// <summary>
         /// Gets or sets the address of this contact.
@@ -55,34 +48,22 @@ namespace Freshdesk.Schema
         public bool CanViewAllTickets { get; set; }
 
         /// <summary>
-        /// Gets the company to which this contact belongs.
-        /// 
-        /// This property is read-only.
+        /// Gets or sets the company to which this contact belongs.
         /// </summary>
         [JsonProperty("company_id", NullValueHandling = NullValueHandling.Ignore)]
-        public long CompanyId
-        {
-            get { return _CompanyId; }
-            set { if (!ReadOnlyLocked) _CompanyId = value; }
-        }
-        private long _CompanyId;
+        public long CompanyId { get; set; }
 
         /// <summary>
-        /// Gets or sets the creation date of this contact.
+        /// Gets the creation date of this contact.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime CreatedAt
-        {
-            get { return _CreatedAt; }
-            set { if (!ReadOnlyLocked) _CreatedAt = value; }
-        }
-        private DateTime _CreatedAt;
+        public DateTime CreatedAt { get; private set; }
 
         /// <summary>
-        /// Gets or sets the key-value pairs containing the names and values of custom fields.
+        /// Gets the key-value pairs containing the names and values of custom fields.
         /// </summary>
         [JsonProperty("custom_fields")]
-        public Dictionary<string, object> CustomFields { get; set; }
+        public Dictionary<string, object> CustomFields { get; private set; }
 
         /// <summary>
         /// Gets or sets the description of this contact.
@@ -91,30 +72,16 @@ namespace Freshdesk.Schema
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets the email address assigned to this contact.
-        /// 
-        /// This property is read-only.
+        /// Gets or sets the email address assigned to this contact.
         /// </summary>
         [JsonProperty("email")]
-        public string Email
-        {
-            get { return _Email; }
-            set { if (!ReadOnlyLocked) _Email = value; }
-        }
-        private string _Email;
+        public string Email { get; set; }
 
         /// <summary>
         /// Gets the unique ID of the contact.
-        /// 
-        /// This property is read-only.
         /// </summary>
         [JsonProperty("id")]
-        public long Id
-        {
-            get { return _Id; }
-            set { if (!ReadOnlyLocked) _Id = value; }
-        }
-        private long _Id;
+        public long Id { get; private set; }
 
         /// <summary>
         /// Gets or sets the job title of this contact.
@@ -147,15 +114,10 @@ namespace Freshdesk.Schema
         public string PhoneNumber { get; set; }
 
         /// <summary>
-        /// Gets the time zone of this contact.
+        /// Gets or sets the time zone of this contact.
         /// </summary>
         [JsonProperty("time_zone")]
-        public string TimeZone
-        {
-            get { return _TimeZone; }
-            set { if (!ReadOnlyLocked) _TimeZone = value; }
-        }
-        private string _TimeZone;
+        public string TimeZone { get; set; }
 
         /// <summary>
         /// Gets or sets twitter ID of this contact.
@@ -177,52 +139,45 @@ namespace Freshdesk.Schema
         /// Gets or sets the last updated date of this contact.
         /// </summary>
         [JsonProperty("updated_at")]
-        public DateTime UpdatedAt
-        {
-            get { return _UpdatedAt; }
-            set { if (!ReadOnlyLocked) _UpdatedAt = value; }
-        }
-        private DateTime _UpdatedAt;
-
+        public DateTime UpdatedAt { get; private set; }
 
 
         /// <summary>
-        /// The value indicating whether the read-only properties are locked.
+        /// The Freshdesk connection instance that was used to acquire this contact.
         /// </summary>
-        private bool ReadOnlyLocked { get; set; }
+        private FreshdeskConnection FreshdeskConnection { get; set; }
 
 
         /// <summary>
         /// Initializes a new instance of the Contact class.
         /// </summary>
-        public Contact()
-        {
-            ReadOnlyLocked = true;
-        }
+        public Contact() { }
 
         /// <summary>
         /// Initializes a new instance of the Contact class from JSON source data.
         /// </summary>
         /// <param name="json">The JSON to deserialize from.</param>
-        public Contact(string json)
+        /// <param name="fdConn">The Freshdesk connection used to acquire this contact.</param>
+        public Contact(string json, FreshdeskConnection fdConn = null)
         {
             JsonConvert.PopulateObject(json, this);
 
-            ReadOnlyLocked = true;
+            FreshdeskConnection = fdConn;
         }
 
         /// <summary>
         /// Initializes a new instance of the Contact class from a JSON object.
         /// </summary>
         /// <param name="obj">The JSON object.</param>
-        public Contact(JObject obj)
+        /// <param name="fdConn">The Freshdesk connection used to acquire this contact.</param>
+        public Contact(JObject obj, FreshdeskConnection fdConn = null)
         {
             using (var jReader = obj.CreateReader())
             {
                 JsonSerializer.CreateDefault().Populate(jReader, this);
             }
 
-            ReadOnlyLocked = true;
+            FreshdeskConnection = fdConn;
         }
     }
 }

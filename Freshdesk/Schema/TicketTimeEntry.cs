@@ -23,17 +23,10 @@ namespace Freshdesk.Schema
     public sealed class TicketTimeEntry
     {
         /// <summary>
-        /// Gets the agent to which this time entry belongs.
-        /// 
-        /// This property is read-only.
+        /// Gets or sets the ID of the agent to which this time entry belongs.
         /// </summary>
         [JsonProperty("agent_id")]
-        public bool AgentId
-        {
-            get { return _AgentId; }
-            set { if (!ReadOnlyLocked) _AgentId = value; }
-        }
-        private bool _AgentId;
+        public long AgentId { get; set; }
 
         /// <summary>
         /// Gets or sets whether this time entry should be marked as billable.
@@ -42,39 +35,22 @@ namespace Freshdesk.Schema
         public bool Billable { get; set; }
 
         /// <summary>
-        /// Gets the company to which this time entry belongs.
-        /// 
-        /// This property is read-only.
+        /// Gets the ID of the company to which this time entry belongs.
         /// </summary>
         [JsonProperty("company_id", NullValueHandling = NullValueHandling.Ignore)]
-        public long CompanyId
-        {
-            get { return _CompanyId; }
-            set { if (!ReadOnlyLocked) _CompanyId = value; }
-        }
-        private long _CompanyId;
+        public long CompanyId { get; private set; }
         
         /// <summary>
         /// Gets or sets the creation date of this time entry.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime CreatedAt
-        {
-            get { return _CreatedAt; }
-            set { if (!ReadOnlyLocked) _CreatedAt = value; }
-        }
-        private DateTime _CreatedAt;
+        public DateTime CreatedAt { get; private set; }
 
         /// <summary>
         /// Gets or sets the addition/creation date of this time entry.
         /// </summary>
         [JsonProperty("executed_at")]
-        public DateTime ExecutedAt
-        {
-            get { return _ExecutedAt; }
-            set { if (!ReadOnlyLocked) _ExecutedAt = value; }
-        }
-        private DateTime _ExecutedAt;
+        public DateTime ExecutedAt { get; set; }
 
         /// <summary>
         /// Gets or sets the note attached to this time entry.
@@ -84,51 +60,27 @@ namespace Freshdesk.Schema
 
         /// <summary>
         /// Gets the unique ID of the time entry.
-        /// 
-        /// This property is read-only.
         /// </summary>
         [JsonProperty("id")]
-        public long Id
-        {
-            get { return _Id; }
-            set { if (!ReadOnlyLocked) _Id = value; }
-        }
-        private long _Id;
+        public long Id { get; private set; }
 
         /// <summary>
         /// Gets or sets the start date of this time entry.
         /// </summary>
         [JsonProperty("start_time")]
-        public DateTime StartTime
-        {
-            get { return _StartTime; }
-            set { if (!ReadOnlyLocked) _StartTime = value; }
-        }
-        private DateTime _StartTime;
+        public DateTime StartTime { get; set; }
 
         /// <summary>
-        /// Gets the ticket to which this time entry belongs.
-        /// 
-        /// This property is read-only.
+        /// Gets the ID of the ticket to which this time entry belongs.
         /// </summary>
         [JsonProperty("ticket_id")]
-        public bool TicketId
-        {
-            get { return _TicketId; }
-            set { if (!ReadOnlyLocked) _TicketId = value; }
-        }
-        private bool _TicketId;
+        public long TicketId { get; private set; }
 
         /// <summary>
-        /// Gets the value indicating whether this time entry is an actively running timer.
+        /// Gets or sets the value indicating whether this time entry is an actively running timer.
         /// </summary>
         [JsonProperty("timer_running")]
-        public bool TimerRunning
-        {
-            get { return _TimerRunning; }
-            set { if (!ReadOnlyLocked) _TimerRunning = value; }
-        }
-        private bool _TimerRunning;
+        public bool TimerRunning { get; set; }
 
         /// <summary>
         /// Gets or sets the amount of time spent in this time entry.
@@ -140,50 +92,45 @@ namespace Freshdesk.Schema
         /// Gets or sets the last updated date of this time entry.
         /// </summary>
         [JsonProperty("updated_at")]
-        public DateTime UpdatedAt
-        {
-            get { return _UpdatedAt; }
-            set { if (!ReadOnlyLocked) _UpdatedAt = value; }
-        }
-        private DateTime _UpdatedAt;
-        
+        public DateTime UpdatedAt { get; private set; }
+
 
         /// <summary>
-        /// The value indicating whether the read-only properties are locked.
+        /// The Freshdesk connection instance that was used to acquire this time entry.
         /// </summary>
-        private bool ReadOnlyLocked { get; set; }
+        private FreshdeskConnection FreshdeskConnection { get; set; }
 
 
         /// <summary>
         /// Initializes a new instance of the TicketTimeEntry class.
         /// </summary>
-        public TicketTimeEntry()
-        {
-            ReadOnlyLocked = true;
-        }
+        public TicketTimeEntry() { }
 
         /// <summary>
         /// Initializes a new instance of the TicketTimeEntry class from JSON source data.
         /// </summary>
         /// <param name="json">The JSON to deserialize from.</param>
-        public TicketTimeEntry(string json)
+        /// <param name="fdConn">The Freshdesk connection used to acquire this time entry.</param>
+        public TicketTimeEntry(string json, FreshdeskConnection fdConn = null)
         {
             JsonConvert.PopulateObject(json, this);
-            ReadOnlyLocked = true;
+
+            FreshdeskConnection = fdConn;
         }
 
         /// <summary>
         /// Initializes a new instance of the TicketTimeEntry class from a JSON object.
         /// </summary>
         /// <param name="obj">The JSON object.</param>
-        public TicketTimeEntry(JObject obj)
+        /// <param name="fdConn">The Freshdesk connection used to acquire this time entry.</param>
+        public TicketTimeEntry(JObject obj, FreshdeskConnection fdConn = null)
         {
             using (var jReader = obj.CreateReader())
             {
                 JsonSerializer.CreateDefault().Populate(jReader, this);
             }
 
-            ReadOnlyLocked = true;
+            FreshdeskConnection = fdConn;
         }
     }
 }

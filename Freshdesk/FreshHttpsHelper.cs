@@ -109,10 +109,11 @@ namespace Freshdesk
         /// </summary>
         /// <typeparam name="T">The Type to deserialize the response into.</typeparam>
         /// <param name="uri">The URI of the target.</param>
+        /// <param name="fdConn">The Freshdesk connection instance to pass onto the created object.</param>
         /// <returns>The response from the remote host, deserialized into the specified Type, cast as an object.</returns>
-        public static async Task<object> DoRequest<T>(Uri uri)
+        public static async Task<object> DoRequest<T>(Uri uri, FreshdeskConnection fdConn = null)
         {
-            return await DoRequest<T>(uri, "GET", null);
+            return await DoRequest<T>(uri, "GET", null, fdConn);
         }
 
         /// <summary>
@@ -122,86 +123,36 @@ namespace Freshdesk
         /// <param name="uri">The URI of the target.</param>
         /// <param name="method">The HTTP request method to use.</param>
         /// <param name="body">The request body.</param>
+        /// <param name="fdConn">The Freshdesk connection instance to pass onto the created object.</param>
         /// <returns>The response from the remote host, deserialized into the specified Type, cast as an object.</returns>
-        public static async Task<object> DoRequest<T>(Uri uri, string method, string body)
+        public static async Task<object> DoRequest<T>(Uri uri, string method, string body, FreshdeskConnection fdConn = null)
         {
             var json = await DoRequest(uri, method, body);
             Type genericType = typeof(T);
 
-            // TODO: Replace this tower of IF statements
+            // Check if T is an IList
             //
-            if (genericType == typeof(Ticket))
-                return new Ticket(json);
-            else if (genericType == typeof(IList<Ticket>))
+            foreach (Type impl in genericType.GetInterfaces())
             {
-                JArray arr = JArray.Parse(json);
-                var resultTickets = new List<Ticket>();
-
-                foreach (JObject obj in arr.Children<JObject>())
+                if (impl.IsGenericType && impl.GetGenericTypeDefinition() == typeof(ICollection<>))
                 {
-                    resultTickets.Add(new Ticket(obj));
+                    Type implType = impl.GetGenericArguments()[0]; // Retrieve the T out of IList<T>
+                    
+                    JArray arr = JArray.Parse(json);
+                    var resultCollection = new List<object>();
+
+                    foreach(JObject jObj in arr.Children<JObject>())
+                    {
+                        resultCollection.Add(Activator.CreateInstance(implType, jObj, fdConn));
+                    }
+
+                    return resultCollection.AsReadOnly();
                 }
-
-                return resultTickets.AsReadOnly();
-            }
-            else if (genericType == typeof(Company))
-                return new Company(json);
-            else if (genericType == typeof(IList<Company>))
-            {
-                JArray arr = JArray.Parse(json);
-                var resultCompanies = new List<Company>();
-
-                foreach (JObject obj in arr.Children<JObject>())
-                {
-                    resultCompanies.Add(new Company(obj));
-                }
-
-                return resultCompanies.AsReadOnly();
-            }
-            else if (genericType == typeof(Contact))
-                return new Contact(json);
-            else if (genericType == typeof(IList<Contact>))
-            {
-                JArray arr = JArray.Parse(json);
-                var resultContacts = new List<Contact>();
-
-                foreach (JObject obj in arr.Children<JObject>())
-                {
-                    resultContacts.Add(new Contact(obj));
-                }
-
-                return resultContacts.AsReadOnly();
-            }
-            else if (genericType == typeof(TicketTimeEntry))
-                return new TicketTimeEntry(json);
-            else if (genericType == typeof(IList<TicketTimeEntry>))
-            {
-                JArray arr = JArray.Parse(json);
-                var resultTimeEntries = new List<TicketTimeEntry>();
-
-                foreach (JObject obj in arr.Children<JObject>())
-                {
-                    resultTimeEntries.Add(new TicketTimeEntry(obj));
-                }
-
-                return resultTimeEntries.AsReadOnly();
-            }
-            else if (genericType == typeof(Agent))
-                return new Agent(json);
-            else if (genericType == typeof(IList<Agent>))
-            {
-                JArray arr = JArray.Parse(json);
-                var resultAgents = new List<Agent>();
-
-                foreach (JObject obj in arr.Children<JObject>())
-                {
-                    resultAgents.Add(new Agent(obj));
-                }
-
-                return resultAgents.AsReadOnly();
             }
 
-            throw new NotSupportedException("FreshHttpsHelper.DoRequest<T>: Type '" + genericType.Name + "' is not supported for deserialization.");
+            // T isn't an IList, just create T
+            //
+            return Activator.CreateInstance(genericType, json);
         }
 
         /// <summary>

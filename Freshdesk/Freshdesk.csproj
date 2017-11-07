@@ -73,7 +73,9 @@
     <Compile Include="Schema\Company.cs" />
     <Compile Include="Schema\Contact.cs" />
     <Compile Include="Schema\ContactAvatar.cs" />
+    <Compile Include="Schema\ConversationSource.cs" />
     <Compile Include="Schema\Ticket.cs" />
+    <Compile Include="Schema\Conversation.cs" />
     <Compile Include="Schema\TicketPriority.cs" />
     <Compile Include="Schema\TicketScope.cs" />
     <Compile Include="Schema\TicketSource.cs" />

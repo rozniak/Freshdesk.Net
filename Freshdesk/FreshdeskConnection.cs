@@ -13,6 +13,7 @@
 using Freshdesk.Schema;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -90,7 +91,7 @@ namespace Freshdesk
         /// <returns>An Agent object populated with company data retrieved from Freshdesk if the ID was found, null otherwise.</returns>
         public async Task<Agent> GetAgent(long id)
         {
-            return (Agent)await FreshHttpsHelper.DoRequest<Agent>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/agents/" + id.ToString()));
+            return (Agent)await FreshHttpsHelper.DoRequest<Agent>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/agents/" + id.ToString()), this);
         }
 
         /// <summary>
@@ -107,10 +108,10 @@ namespace Freshdesk
             if (page < 1)
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetAgents: Parameter 'page' out of range, value must be 1 or greater.");
 
-            var result = (IList<Agent>)await FreshHttpsHelper.DoRequest<IList<Agent>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/agents",
-                "page=" + page.ToString() + "&per_page=" + quantity.ToString()));
+            var result = (IList<object>)await FreshHttpsHelper.DoRequest<IList<Agent>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/agents",
+                "page=" + page.ToString() + "&per_page=" + quantity.ToString()), this);
 
-            return new List<Agent>(result).AsReadOnly();
+            return CastReadOnlyList<Agent>(result);
         }
 
         /// <summary>
@@ -127,10 +128,10 @@ namespace Freshdesk
             if (page < 1)
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetCompanies: Parameter 'page' out of range, value must be 1 or greater.");
 
-            var result = (IList<Company>)await FreshHttpsHelper.DoRequest<IList<Company>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/companies",
-                "page=" + page.ToString() + "&per_page=" + quantity.ToString()));
+            var result = (IList<object>)await FreshHttpsHelper.DoRequest<IList<Company>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/companies",
+                "page=" + page.ToString() + "&per_page=" + quantity.ToString()), this);
 
-            return new List<Company>(result).AsReadOnly();
+            return CastReadOnlyList<Company>(result);
         }
 
         /// <summary>
@@ -140,7 +141,7 @@ namespace Freshdesk
         /// <returns>A Company object populated with company data retrieved from Freshdesk if the ID was found, null otherwise.</returns>
         public async Task<Company> GetCompany(long id)
         {
-            return (Company)await FreshHttpsHelper.DoRequest<Company>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/companies/" + id.ToString()));
+            return (Company)await FreshHttpsHelper.DoRequest<Company>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/companies/" + id.ToString()), this);
         }
 
         /// <summary>
@@ -150,7 +151,7 @@ namespace Freshdesk
         /// <returns>A Contact object populated with contact data retrieved from Freshdesk if the ID was found, null otherwise.</returns>
         public async Task<Contact> GetContact(long id)
         {
-            return (Contact)await FreshHttpsHelper.DoRequest<Contact>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/contacts/" + id.ToString()));
+            return (Contact)await FreshHttpsHelper.DoRequest<Contact>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/contacts/" + id.ToString()), this);
         }
 
         /// <summary>
@@ -167,10 +168,10 @@ namespace Freshdesk
             if (page < 1)
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetContacts: Parameter 'page' out of range, value must be 1 or greater.");
 
-            var result = (IList<Contact>)await FreshHttpsHelper.DoRequest<IList<Contact>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/contacts",
-                "page=" + page.ToString() + "&per_page=" + quantity.ToString()));
+            var result = (IList<object>)await FreshHttpsHelper.DoRequest<IList<Contact>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/contacts",
+                "page=" + page.ToString() + "&per_page=" + quantity.ToString()), this);
 
-            return new List<Contact>(result).AsReadOnly();
+            return CastReadOnlyList<Contact>(result);
         }
 
         /// <summary>
@@ -180,7 +181,19 @@ namespace Freshdesk
         /// <returns>A Ticket object populated with ticket data retrieved from Freshdesk if the ID was found, null otherwise.</returns>
         public async Task<Ticket> GetTicket(long id)
         {
-            return (Ticket)await FreshHttpsHelper.DoRequest<Ticket>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets/" + id.ToString(), "include=company,requester"));
+            return (Ticket)await FreshHttpsHelper.DoRequest<Ticket>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets/" + id.ToString(), "include=company,requester"), this);
+        }
+
+        /// <summary>
+        /// Gets all conversations on a ticket from the helpdesk by the ticket's ID.
+        /// </summary>
+        /// <param name="ticketId">The ID of the ticket.</param>
+        /// <returns>A list of conversations from the specified ticket as an IList&lt;Conversation&gt; collection.</returns>
+        public async Task<IList<Conversation>> GetTicketConversations(long ticketId)
+        {
+            var result = (IList<object>)await FreshHttpsHelper.DoRequest<IList<Conversation>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets/" + ticketId.ToString() + "/conversations"), this);
+
+            return CastReadOnlyList<Conversation>(result);
         }
 
         /// <summary>
@@ -197,10 +210,10 @@ namespace Freshdesk
             if (page < 1)
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetTickets: Parameter 'page' out of range, value must be 1 or greater.");
 
-            var result = (IList<Ticket>)await FreshHttpsHelper.DoRequest<IList<Ticket>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets",
-                "page=" + page.ToString() + "&per_page=" + quantity.ToString() + "&updated_since=2000-01-01T01:00:00Z"));
+            var result = (IList<object>)await FreshHttpsHelper.DoRequest<IList<Ticket>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets",
+                "page=" + page.ToString() + "&per_page=" + quantity.ToString() + "&updated_since=2000-01-01T01:00:00Z"), this);
 
-            return new List<Ticket>(result).AsReadOnly();
+            return CastReadOnlyList<Ticket>(result);
         }
 
         /// <summary>
@@ -218,10 +231,10 @@ namespace Freshdesk
             if (page < 1)
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetTicketsByCompany: Parameter 'page' out of range, value must be 1 or greater.");
 
-            var result = (IList<Ticket>) await FreshHttpsHelper.DoRequest<IList<Ticket>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets",
-                "company_id=" + id.ToString() + "&page=" + page.ToString() + "&per_page=" + quantity.ToString() + "&updated_since=2000-01-01T01:00:00Z"));
+            var result = (IList<object>) await FreshHttpsHelper.DoRequest<IList<Ticket>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets",
+                "company_id=" + id.ToString() + "&page=" + page.ToString() + "&per_page=" + quantity.ToString() + "&updated_since=2000-01-01T01:00:00Z"), this);
 
-            return new List<Ticket>(result).AsReadOnly();
+            return CastReadOnlyList<Ticket>(result);
         }
 
         /// <summary>
@@ -238,156 +251,26 @@ namespace Freshdesk
             if (page < 1)
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetTimeEntries: Parameter 'page' out of range, value must be 1 or greater.");
 
-            var result = (IList<TicketTimeEntry>)await FreshHttpsHelper.DoRequest<IList<TicketTimeEntry>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/time_entries",
-                "page=" + page.ToString() + "&per_page=" + quantity.ToString() + "&executed_after=2000-01-01T01:00:00Z"));
+            var result = (IList<object>)await FreshHttpsHelper.DoRequest<IList<TicketTimeEntry>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/time_entries",
+                "page=" + page.ToString() + "&per_page=" + quantity.ToString() + "&executed_after=2000-01-01T01:00:00Z"), this);
 
-            return new List<TicketTimeEntry>(result).AsReadOnly();
+            return CastReadOnlyList<TicketTimeEntry>(result);
         }
 
 
-        
+        /// <summary>
+        /// Helper method for casting IList&lt;object&gt; collections to a read-only collection of the specified Type.
+        /// </summary>
+        /// <typeparam name="T">The Type to cast to within the resulting collection.</typeparam>
+        /// <param name="objCollection">The IList&lt;object&gt; collection.</param>
+        /// <returns>A read-only IList&lt;&gt; collection with generic type T.</returns>
+        private IList<T> CastReadOnlyList<T>(IList<object> objCollection)
+        {
+            var castedResult = from obj in objCollection
+                               select (T)obj;
 
-  //      #region Customers
-  //      /// <summary>
-  //      /// Creates a Company
-  //      /// </summary>
-  //      /// <param name="createCustomerRequest"></param>
-  //      /// <returns></returns>
-  //      public GetCustomerResponse CreateCustomer(CreateCustomerRequest createCustomerRequest)
-  //      {
-  //          if (createCustomerRequest == null)
-  //          {
-  //              throw new ArgumentNullException("createCustomerRequest");
-  //          }
-
-  //          return FreshHttpsHelper.DoRequest<GetCustomerResponse>(FreshHttpsHelper.UriForPath(ConnectionUri, "/customers.json"), "POST", JsonConvert.SerializeObject(createCustomerRequest));
-  //      }
-  //      #endregion
-
-  //      #region Tickets
-        
-
-
-  //      /// <summary>
-  //      /// Creates a Support Ticket
-  //      /// </summary>
-  //      /// <param name="createTicketRequest"></param>
-  //      /// <returns></returns>
-  //      public GetTicketResponse CreateTicket(CreateTicketRequest createTicketRequest) {
-  //          if (createTicketRequest == null)
-  //          {
-  //              throw new ArgumentNullException("createTicketRequest");
-  //          }
-  //          
-  //      }
-
-  //      /// <summary>
-  //      /// Creates a Support Ticket with an attachment
-  //      /// </summary>
-  //      /// <param name="createTicketRequest"></param>
-  //      /// <param name="attachments"></param>
-  //      /// <returns></returns>
-  //      public GetTicketResponse CreateTicketWithAttachment(CreateTicketRequest createTicketRequest, IEnumerable<Attachment> attachments) {
-  //          if (createTicketRequest == null)
-  //          {
-  //              throw new ArgumentNullException("createTicketRequest");
-  //          }
-  //          if (attachments == null)
-  //          {
-  //              throw new ArgumentNullException("attachments");
-  //          }
-
-  //          return FreshHttpsHelper.DoMultipartFormRequest<GetTicketResponse>(FreshHttpsHelper.UriForPath(ConnectionUri, "/helpdesk/tickets.json"), createTicketRequest, attachments, "helpdesk_ticket", "helpdesk_ticket[attachments][][resource]");
-  //      }
-
-  //      /// <summary>
-  //      /// Gets a list of Support Tickets for a company by name
-  //      /// </summary>
-  //      /// <param name="companyName"></param>
-  //      /// <returns></returns>
-  //      public GetTicketListItemResponse[] GetTicketsByCompany(string companyName)
-  //      {
-  //          if (string.IsNullOrEmpty(companyName))
-  //          {
-  //              throw new ArgumentNullException("companyName");
-  //          }
-
-  //          return FreshHttpsHelper.DoRequest<GetTicketListItemResponse[]>(FreshHttpsHelper.UriForPath(ConnectionUri, "/helpdesk/tickets.json", "company_name=" + companyName + "&filter_name=all_tickets"));
-  //      }
-  //      #endregion
-
-  //      #region Users
-  //      /// <summary>
-  //      /// Create Contact
-  //      /// </summary>
-  //      /// <param name="createUserRequest"></param>
-  //      /// <returns></returns>
-  //      public GetUserResponse CreateUser(CreateUserRequest createUserRequest) {
-  //          if (createUserRequest == null) {
-  //              throw new ArgumentNullException("createUserRequest");
-  //          }
-  //          return FreshHttpsHelper.DoRequest<GetUserResponse>(FreshHttpsHelper.UriForPath(ConnectionUri, "/contacts.json"), "POST", JsonConvert.SerializeObject(createUserRequest));
-  //      }
-
-  //      /// <summary>
-  //      /// Update a contact
-  //      /// </summary>
-  //      /// <param name="updateUserRequest"></param>
-  //      /// <param name="id"></param>
-  //      public void UpdateUser(UpdateUserRequest updateUserRequest, long id) {
-  //          if (updateUserRequest == null) {
-  //              throw new ArgumentNullException("updateUserRequest");
-  //          }
-  //          FreshHttpsHelper.DoRequest<string>(FreshHttpsHelper.UriForPath(ConnectionUri, string.Format("/contacts/{0}.json", id)), "PUT", JsonConvert.SerializeObject(updateUserRequest));
-  //      }
-
-  //      /// <summary>
-  //      /// Get users
-  //      /// </summary>
-  //      /// <returns></returns>
-		//public IEnumerable<GetUserRequest> GetUsers() {
-
-  //          var users = new List<GetUserRequest>();
-  //          var page = 1;
-  //          while (true)
-  //          {
-  //              var paginatedUsers = FreshHttpsHelper.DoRequest<IEnumerable<GetUserRequest>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/contacts.json", string.Format("page={0}", page))).ToList();
-
-  //              if (paginatedUsers.Any())
-  //              {
-  //                  users.AddRange(paginatedUsers);
-  //                  page++;
-  //              }
-  //              else
-  //              {
-  //                  break;
-  //              }
-  //          }
-  //          return users;
-  //      }
-
-
-  //      #endregion
-
-  //      #region Time Entries
-  //      /// <summary>
-  //      /// Creates a Time Entry
-  //      /// </summary>
-  //      /// <param name="createTimeRequest"></param>
-  //      /// <returns></returns>
-  //      public GetTimeResponse CreateTimeEntry(CreateTimeRequest createTimeRequest, int ticket)
-  //      {
-
-  //          if (createTimeRequest == null)
-  //          {
-  //              throw new ArgumentNullException("createTimeRequest");
-  //          }
-  //          return FreshHttpsHelper.DoRequest<GetTimeResponse>(FreshHttpsHelper.UriForPath(ConnectionUri, "/helpdesk/tickets/" + ticket.ToString() + "/time_sheets.json"), "POST", JsonConvert.SerializeObject(createTimeRequest));
-  //      }
-
-
-  //      #endregion
-
+            return new List<T>(castedResult).AsReadOnly();
+        }
     }
 
 }

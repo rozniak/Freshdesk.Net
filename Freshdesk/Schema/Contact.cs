@@ -84,6 +84,17 @@ namespace Freshdesk.Schema
         public long Id { get; private set; }
 
         /// <summary>
+        /// Determines whether this contact has been deleted.
+        /// </summary>
+        /// <remarks>
+        /// Deleted contacts will not be displayed unless "state=deleted" is passed in the API query string.
+        /// 
+        /// This field is also not returned by Freshdesk at all for contacts that aren't deleted.
+        /// </remarks>
+        [JsonProperty("deleted", NullValueHandling = NullValueHandling.Ignore)]
+        public bool IsDeleted { get; private set; }
+
+        /// <summary>
         /// Gets or sets the job title of this contact.
         /// </summary>
         [JsonProperty("job_title")]

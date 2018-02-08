@@ -79,12 +79,6 @@ namespace Freshdesk.Schema
         public string Description { get; private set; }
 
         /// <summary>
-        /// Gets or sets the HTML content of the ticket.
-        /// </summary>
-        [JsonProperty("description")]
-        public string HtmlDescription { get; set; }
-
-        /// <summary>
         /// Gets or sets the timestamp that denotes when the ticket is due to be resolved.
         /// </summary>
         [JsonProperty("due_by")]
@@ -139,6 +133,12 @@ namespace Freshdesk.Schema
         public long GroupId { get; set; }
 
         /// <summary>
+        /// Gets or sets the HTML content of the ticket.
+        /// </summary>
+        [JsonProperty("description")]
+        public string HtmlDescription { get; set; }
+
+        /// <summary>
         /// Gets the unique ID of the ticket.
         /// </summary>
         [JsonProperty("id")]
@@ -152,8 +152,7 @@ namespace Freshdesk.Schema
         /// </remarks>
         [JsonProperty("deleted")]
         public bool IsDeleted { get; private set; }
-
-
+        
         /// <summary>
         /// Gets whether the ticket has been escalated for any reason.
         /// </summary>

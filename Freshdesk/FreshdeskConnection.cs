@@ -128,8 +128,12 @@ namespace Freshdesk
             if (page < 1)
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetCompanies: Parameter 'page' out of range, value must be 1 or greater.");
 
-            var result = (IList<object>)await FreshHttpsHelper.DoRequest<IList<Company>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/companies",
-                "page=" + page.ToString() + "&per_page=" + quantity.ToString()), this);
+            var result = (IList<object>)await FreshHttpsHelper.DoRequest<IList<Company>>(
+                FreshHttpsHelper.UriForPath(
+                    ConnectionUri, "/api/v2/companies",
+                    "page=" + page.ToString() + "&per_page=" + quantity.ToString()),
+                this
+            );
 
             return CastReadOnlyList<Company>(result);
         }
@@ -158,9 +162,10 @@ namespace Freshdesk
         /// Gets a list of contacts from the helpdesk.
         /// </summary>
         /// <param name="page">The page number.</param>
+        /// <param name="applyDeletedFilter">True to filter this request to deleted contacts only.</param>
         /// <param name="quantity">The max number of contacts to return on a given page. The maximum Freshdesk will accept is 100.</param>
         /// <returns>A list of contacts from the specified page, with a specified maximum amount of results, as an IList&lt;Contact&gt; collection.</returns>
-        public async Task<IList<Contact>> GetContacts(int page, int quantity = 30)
+        public async Task<IList<Contact>> GetContacts(int page, bool applyDeletedFilter, int quantity = 30)
         {
             if (quantity < 1 || quantity > 100)
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetContacts: Parameter 'quantity' out of range, accepted values are between 1 and 100 inclusive.");
@@ -168,8 +173,13 @@ namespace Freshdesk
             if (page < 1)
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetContacts: Parameter 'page' out of range, value must be 1 or greater.");
 
-            var result = (IList<object>)await FreshHttpsHelper.DoRequest<IList<Contact>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/contacts",
-                "page=" + page.ToString() + "&per_page=" + quantity.ToString()), this);
+            var result = (IList<object>)await FreshHttpsHelper.DoRequest<IList<Contact>>(
+                FreshHttpsHelper.UriForPath(
+                    ConnectionUri, "/api/v2/contacts",
+                    "page=" + page.ToString() + "&per_page=" + quantity.ToString() + (applyDeletedFilter ? "&state=deleted" : "")
+                ),
+                this
+            );
 
             return CastReadOnlyList<Contact>(result);
         }
@@ -200,9 +210,10 @@ namespace Freshdesk
         /// Gets a list of tickets from the helpdesk ticket list.
         /// </summary>
         /// <param name="page">The page number.</param>
+        /// <param name="applyDeletedFilter">True to filter this request to deleted tickets only.</param>
         /// <param name="quantity">The max number of tickets to return on a given page. The maximum Freshdesk will accept is 100.</param>
         /// <returns>A list of tickets from the specified page, with a specified maximum amount of results, as an IList&lt;Ticket&gt; collection.</returns>
-        public async Task<IList<Ticket>> GetTickets(int page, int quantity = 30)
+        public async Task<IList<Ticket>> GetTickets(int page, bool applyDeletedFilter, int quantity = 30)
         {
             if (quantity < 1 || quantity > 100)
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetTickets: Parameter 'quantity' out of range, accepted values are between 1 and 100 inclusive.");
@@ -210,8 +221,12 @@ namespace Freshdesk
             if (page < 1)
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetTickets: Parameter 'page' out of range, value must be 1 or greater.");
 
-            var result = (IList<object>)await FreshHttpsHelper.DoRequest<IList<Ticket>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets",
-                "page=" + page.ToString() + "&per_page=" + quantity.ToString() + "&updated_since=2000-01-01T01:00:00Z"), this);
+            var result = (IList<object>)await FreshHttpsHelper.DoRequest<IList<Ticket>>(
+                FreshHttpsHelper.UriForPath(
+                    ConnectionUri, "/api/v2/tickets",
+                    "page=" + page.ToString() + "&per_page=" + quantity.ToString() + "&updated_since=2000-01-01T01:00:00Z" + (applyDeletedFilter ? "&filter=deleted" : "")),
+                this
+            );
 
             return CastReadOnlyList<Ticket>(result);
         }

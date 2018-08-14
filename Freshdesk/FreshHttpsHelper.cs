@@ -137,13 +137,25 @@ namespace Freshdesk
                 if (impl.IsGenericType && impl.GetGenericTypeDefinition() == typeof(ICollection<>))
                 {
                     Type implType = impl.GetGenericArguments()[0]; // Retrieve the T out of IList<T>
-                    
+
                     JArray arr = JArray.Parse(json);
                     var resultCollection = new List<object>();
 
-                    foreach(JObject jObj in arr.Children<JObject>())
+                    foreach (JObject jObj in arr.Children<JObject>())
                     {
-                        resultCollection.Add(Activator.CreateInstance(implType, jObj, fdConn));
+                        try
+                        {
+                            resultCollection.Add(Activator.CreateInstance(implType, jObj, fdConn));
+                        }
+                        catch (Exception ex)
+                        {
+                            JToken idToken;
+
+                            if (jObj.TryGetValue("id", out idToken))
+                                ex.Data.Add("Freshdesk_ID", idToken.ToString());
+
+                            throw ex;
+                        }
                     }
 
                     return resultCollection.AsReadOnly();

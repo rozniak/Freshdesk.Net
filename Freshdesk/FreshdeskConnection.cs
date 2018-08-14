@@ -215,16 +215,31 @@ namespace Freshdesk
         /// <returns>A list of tickets from the specified page, with a specified maximum amount of results, as an IList&lt;Ticket&gt; collection.</returns>
         public async Task<IList<Ticket>> GetTickets(int page, bool applyDeletedFilter, int quantity = 30)
         {
+            return await GetTickets(page, applyDeletedFilter, new DateTime(2000, 1, 1), quantity);
+        }
+
+        /// <summary>
+        /// Gets a list of tickets from the helpdesk ticket list.
+        /// </summary>
+        /// <param name="page">The page number.</param>
+        /// <param name="applyDeletedFilter">True to filter this request to deleted tickets only.</param>
+        /// <param name="updatedSinceFilter">The date and time of the earliest "last updated" ticket to filter by.</param>
+        /// <param name="quantity">The max number of tickets to return on a given page. The maximum Freshdesk will accept is 100.</param>
+        /// <returns>A list of tickets from the specified page, with a specified maximum amount of results, as an IList&lt;Ticket&gt; collection.</returns>
+        public async Task<IList<Ticket>> GetTickets(int page, bool applyDeletedFilter, DateTime updatedSinceFilter, int quantity = 30)
+        {
             if (quantity < 1 || quantity > 100)
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetTickets: Parameter 'quantity' out of range, accepted values are between 1 and 100 inclusive.");
 
             if (page < 1)
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetTickets: Parameter 'page' out of range, value must be 1 or greater.");
 
+            string req = "page=" + page.ToString() + "&per_page=" + quantity.ToString() + "&updated_since=" + updatedSinceFilter.ToUniversalTime().ToString("s") + "Z" + (applyDeletedFilter ? "&filter=deleted" : "");
+
             var result = (IList<object>)await FreshHttpsHelper.DoRequest<IList<Ticket>>(
                 FreshHttpsHelper.UriForPath(
                     ConnectionUri, "/api/v2/tickets",
-                    "page=" + page.ToString() + "&per_page=" + quantity.ToString() + "&updated_since=2000-01-01T01:00:00Z" + (applyDeletedFilter ? "&filter=deleted" : "")),
+                    req),
                 this
             );
 

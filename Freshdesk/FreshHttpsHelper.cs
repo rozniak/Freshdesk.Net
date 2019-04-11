@@ -100,7 +100,7 @@ namespace Freshdesk
                 requestStream.Close();
             }
 
-            var response = webRequest.GetResponse();
+            var response = (HttpWebResponse) webRequest.GetResponse();
             return GetResponseAsString(response);
         }
 
@@ -202,7 +202,7 @@ namespace Freshdesk
                 }
             }
 
-            using (WebResponse response = await request.GetResponseAsync())
+            using (var response = (HttpWebResponse) await request.GetResponseAsync())
             {
                 result = GetResponseAsString(response);
             }
@@ -239,12 +239,45 @@ namespace Freshdesk
             return "Basic " + await Task.Run(() => Convert.ToBase64String(Encoding.Default.GetBytes(_AuthorizationKey + ":" + "X")));
         }
 
-        private static string GetResponseAsString(WebResponse response)
+        private static string GetResponseAsString(HttpWebResponse response)
         {
-            using (StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding))
+            // We need to retrieve the transfer encoding first, Freshdesk can use
+            // 'chunked' transfer encoding, this can cause problems if we read the
+            // stream incorrectly
+            //
+            string resultStr = String.Empty;
+            string transferEncoding = response.GetResponseHeader("transfer-encoding");
+            
+            using (Stream s = response.GetResponseStream())
             {
-                return sr.ReadToEnd();
+                if (transferEncoding == "chunked")
+                {
+                    byte[] buffer = new byte[8192]; // Buffer 8KB at a time
+                    int chunkSize = 999;
+                    var sb = new StringBuilder();
+                    
+                    while (chunkSize > 0)
+                    {
+                        chunkSize = s.Read(buffer, 0, buffer.Length);
+
+                        if (chunkSize > 0)
+                        {
+                            sb.Append(Encoding.GetString(buffer, 0, chunkSize));
+                        }
+                    }
+
+                    resultStr = sb.ToString();
+                }
+                else
+                {
+                    using (var sr = new StreamReader(s, Encoding))
+                    {
+                        resultStr = sr.ReadToEnd();
+                    }
+                }
             }
+
+            return resultStr;
         }
 
         private static Dictionary<string, string> GetStringsContent(object instance)

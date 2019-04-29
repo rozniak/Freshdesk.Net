@@ -19,6 +19,7 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Freshdesk
@@ -32,6 +33,11 @@ namespace Freshdesk
         /// The encoding to use during transmission.
         /// </summary>
         private static readonly Encoding Encoding = Encoding.UTF8;
+
+        /// <summary>
+        /// The timeout for <see cref="WebRequest.GetResponseAsync"/> calls made by this class.
+        /// </summary>
+        private const int RequestTimeout = 10000;
 
         /// <summary>
         /// The user agent string to use during transmission.
@@ -196,15 +202,47 @@ namespace Freshdesk
                 request.ContentLength = data.Length;
 
                 // Begin the async request
+                //
                 using (Stream s = await request.GetRequestStreamAsync())
                 {
                     s.Write(data, 0, data.Length);
                 }
             }
 
-            using (var response = (HttpWebResponse) await request.GetResponseAsync())
+            // Issue the request - note though that we must issue a timeout ourselves
+            // in case anything blows up
+            //
+            using (var timeoutCancelToken = new CancellationTokenSource())
             {
-                result = GetResponseAsString(response);
+                var responseTask = request.GetResponseAsync();
+                var taskResult = await Task.WhenAny(
+                    responseTask,
+                    Task.Delay(
+                        RequestTimeout,
+                        timeoutCancelToken.Token
+                        )
+                    );
+
+                if (taskResult == responseTask)
+                {
+                    timeoutCancelToken.Cancel();
+
+                    using (var response = (HttpWebResponse)await responseTask)
+                    {
+                        result = GetResponseAsString(response);
+                    }
+                }
+                else
+                {
+                    request.Abort();
+                    
+                    var ex = new TimeoutException("The Freshdesk API call timed out.");
+
+                    ex.Data["HttpMethod"] = method;
+                    ex.Data["Uri"] = uri;
+
+                    throw ex;
+                }
             }
 
             return result;

@@ -22,6 +22,25 @@ namespace Freshdesk.Schema
     public sealed class ContactAvatar
     {
         /// <summary>
+        /// Gets or sets the URL for the attachment that represents this avatar's
+        /// image.
+        /// </summary>
+        public Uri AttachmentUrl
+        {
+            get
+            {
+                if (_AttachmentUrl != null)
+                {
+                    return new Uri(_AttachmentUrl);
+                }
+
+                return null;
+            }
+        }
+        [JsonProperty("attachment_url")]
+        private string _AttachmentUrl { get; set; }
+
+        /// <summary>
         /// Gets the creation date of this avatar.
         /// </summary>
         [JsonProperty("created_at")]
@@ -46,26 +65,33 @@ namespace Freshdesk.Schema
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the raw source URL of this avatar.
-        /// </summary>
-        [JsonProperty("avatar_url")]
-        public string RawUrl { get; set; }
-
-        /// <summary>
         /// Gets or sets the size of this avatar.
         /// </summary>
         [JsonProperty("size")]
         public int Size { get; set; }
 
         /// <summary>
+        /// Gets or sets the URL for the thumbnail of this avatar.
+        /// </summary>
+        public Uri ThumbUrl
+        {
+            get
+            {
+                if (_ThumbUrl != null)
+                {
+                    return new Uri(_ThumbUrl);
+                }
+
+                return null;
+            }
+        }
+        [JsonProperty("thumb_url")]
+        private string _ThumbUrl { get; set; }
+
+        /// <summary>
         /// Gets the last updated date of this avatar.
         /// </summary>
         [JsonProperty("updated_at")]
         public DateTime UpdatedAt { get; private set; }
-
-        /// <summary>
-        /// Gets the source URL of this avatar.
-        /// </summary>
-        public Uri Url { get { return new Uri(this.RawUrl); } }
     }
 }

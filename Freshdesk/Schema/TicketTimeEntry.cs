@@ -85,8 +85,27 @@ namespace Freshdesk.Schema
         /// <summary>
         /// Gets or sets the amount of time spent in this time entry.
         /// </summary>
+        public TimeSpan TimeSpent
+        {
+            get
+            {
+                string[] components   = _TimeSpent.Split(':');
+                int      totalHours   = Convert.ToInt32(components[0]);
+                int      totalMinutes = Convert.ToInt32(components[1]);
+
+                int days  = totalHours / 24;
+                int hours = totalHours % 24;
+
+                return new TimeSpan(
+                    days,
+                    hours,
+                    totalMinutes,
+                    0
+                );
+            }
+        }
         [JsonProperty("time_spent")]
-        public TimeSpan TimeSpent { get; set; }
+        private string _TimeSpent { get; set; }
 
         /// <summary>
         /// Gets or sets the last updated date of this time entry.

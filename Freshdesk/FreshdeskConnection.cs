@@ -54,8 +54,8 @@ namespace Freshdesk
 
             ConnectionUri = connUri;
 
-            // Force TLS 1.1 or higher. Anything lower is deprecated in the Freshdesk API as of 2016-09-30
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11;
+            // Use TLS 1.2. Anything lower is deprecated in the Freshdesk API as of 2020-04-30
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
         }
 
 

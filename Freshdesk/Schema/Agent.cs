@@ -20,7 +20,7 @@ namespace Freshdesk.Schema
     /// Represents a Freshdesk agent
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public sealed class Agent
+    public sealed class Agent : IFreshdeskObject
     {
         /// <summary>
         /// Gets or sets the value that indicates whether this agent is accepting new tickets.
@@ -45,6 +45,14 @@ namespace Freshdesk.Schema
         /// </summary>
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; private set; }
+
+        /// <summary>
+        /// Gets the data type of the object.
+        /// </summary>
+        public FreshdeskObjectKind DataType
+        {
+            get { return FreshdeskObjectKind.Agent; }
+        }
 
         /// <summary>
         /// Gets or sets the group IDs associated with this agent.

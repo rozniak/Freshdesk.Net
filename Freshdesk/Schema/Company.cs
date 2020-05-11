@@ -21,7 +21,7 @@ namespace Freshdesk.Schema
     /// Represents a Freshdesk company.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public sealed class Company
+    public sealed class Company : IFreshdeskObject
     {
         /// <summary>
         /// Gets the company's creation timestamp.
@@ -34,6 +34,14 @@ namespace Freshdesk.Schema
         /// </summary>
         [JsonProperty("custom_fields")]
         public Dictionary<string, object> CustomFields { get; private set; }
+
+        /// <summary>
+        /// Gets the data type of the object.
+        /// </summary>
+        public FreshdeskObjectKind DataType
+        {
+            get { return FreshdeskObjectKind.Company; }
+        }
 
         /// <summary>
         /// Gets or sets the description of the company.

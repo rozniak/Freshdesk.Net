@@ -22,7 +22,7 @@ namespace Freshdesk.Schema
     /// Represents a Freshdesk ticket.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public sealed class Ticket
+    public sealed class Ticket : IFreshdeskObject
     {
         // TODO: Add attachments property
 

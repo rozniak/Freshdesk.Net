@@ -21,7 +21,7 @@ namespace Freshdesk.Schema
     /// Represents a Freshdesk contact.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public sealed class Contact
+    public sealed class Contact : IFreshdeskObject
     {
         /// <summary>
         /// Gets whether this contact is active.
@@ -64,6 +64,14 @@ namespace Freshdesk.Schema
         /// </summary>
         [JsonProperty("custom_fields")]
         public Dictionary<string, object> CustomFields { get; private set; }
+
+        /// <summary>
+        /// Gets the data type of the object.
+        /// </summary>
+        public FreshdeskObjectKind DataType
+        {
+            get { return FreshdeskObjectKind.Contact; }
+        }
 
         /// <summary>
         /// Gets or sets the description of this contact.

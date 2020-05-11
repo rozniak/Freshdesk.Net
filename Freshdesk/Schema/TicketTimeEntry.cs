@@ -20,7 +20,7 @@ namespace Freshdesk.Schema
     /// Represents a Freshdesk time entry.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public sealed class TicketTimeEntry
+    public sealed class TicketTimeEntry : IFreshdeskObject
     {
         /// <summary>
         /// Gets or sets the ID of the agent to which this time entry belongs.
@@ -45,6 +45,14 @@ namespace Freshdesk.Schema
         /// </summary>
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; private set; }
+
+        /// <summary>
+        /// Gets the data type of the object.
+        /// </summary>
+        public FreshdeskObjectKind DataType
+        {
+            get { return FreshdeskObjectKind.TimeEntry; }
+        }
 
         /// <summary>
         /// Gets or sets the addition/creation date of this time entry.

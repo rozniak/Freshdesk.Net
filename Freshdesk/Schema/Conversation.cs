@@ -21,7 +21,7 @@ namespace Freshdesk.Schema
     /// Represents a conversation on a ticket.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public sealed class Conversation
+    public sealed class Conversation : IFreshdeskObject
     {
         /// <summary>
         /// Gets the collection of email addresses that are in the BCC field of the outgoing ticket email.
@@ -46,7 +46,6 @@ namespace Freshdesk.Schema
         [JsonProperty("body_text")]
         public string Body { get; private set; }
 
-
         /// <summary>
         /// Gets the collection of email addresses that are in the CC field of the outgoing ticket email.
         /// </summary>
@@ -70,6 +69,13 @@ namespace Freshdesk.Schema
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; private set; }
 
+        /// <summary>
+        /// Gets the data type of the object.
+        /// </summary>
+        public FreshdeskObjectKind DataType
+        {
+            get { return FreshdeskObjectKind.Conversation; }
+        }
 
         /// <summary>
         /// Gets or sets the HTML content of the conversation.
@@ -77,13 +83,11 @@ namespace Freshdesk.Schema
         [JsonProperty("body")]
         public string HtmlBody { get; set; }
 
-
         /// <summary>
         /// Gets the unique ID of the conversation.
         /// </summary>
         [JsonProperty("id")]
         public long Id { get; private set; }
-
 
         /// <summary>
         /// Gets or sets the value that indicates whether this conversation should appear as though it was created from outside of Freshdesk.
@@ -97,7 +101,6 @@ namespace Freshdesk.Schema
         /// </summary>
         [JsonProperty("private")]
         public bool IsPrivate { get; set; }
-
 
         /// <summary>
         /// Gets the collection of users to be notified about this conversation.
@@ -121,7 +124,6 @@ namespace Freshdesk.Schema
         /// </summary>
         [JsonProperty("to_emails")]
         public string[] Recipients { get; private set; }
-
 
         /// <summary>
         /// Gets or sets the email address from which the reply is sent.
@@ -148,7 +150,6 @@ namespace Freshdesk.Schema
         [JsonProperty("source")]
         public ConversationSource Source { get; private set; }
 
-
         /// <summary>
         /// Gets the email address from which the reply was sent.
         /// </summary>
@@ -156,20 +157,17 @@ namespace Freshdesk.Schema
         [JsonProperty("support_email", NullValueHandling = NullValueHandling.Ignore)]
         public string SupportEmail { get; private set; }
 
-
         /// <summary>
         /// Gets the ID of the ticket to which this conversation belongs.
         /// </summary>
         [JsonProperty("ticket_id")]
         public long TicketId { get; private set; }
 
-
         /// <summary>
         /// Gets the last updated date of this conversation.
         /// </summary>
         [JsonProperty("updated_at")]
         public DateTime UpdatedAt { get; private set; }
-
 
         /// <summary>
         /// Gets or sets the ID of the user that created this conversation.

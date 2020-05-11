@@ -32,7 +32,6 @@ namespace Freshdesk.Schema
         [JsonProperty("responder_id")]
         public string AssignedAgentId { get; set; }
 
-
         /// <summary>
         /// Gets the ID of the company to which this ticket belongs.
         /// </summary>
@@ -43,13 +42,11 @@ namespace Freshdesk.Schema
         [JsonProperty("company_id", NullValueHandling = NullValueHandling.Ignore)]
         public long CompanyId { get; private set; }
         
-
         /// <summary>
         /// Gets or sets the email address(es) added in the 'cc' field of the incoming ticket email.
         /// </summary>
         [JsonProperty("cc_emails", NullValueHandling = NullValueHandling.Ignore)]
         public string[] CopiedInRecipients { get; set; }
-        
         
         /// <summary>
         /// Gets the email address(es) added while replying to a ticket.
@@ -57,20 +54,25 @@ namespace Freshdesk.Schema
         [JsonProperty("reply_cc_emails", NullValueHandling = NullValueHandling.Ignore)]
         public string[] CopiedInRecipientsOnReply { get; private set; }
 
-
         /// <summary>
         /// Gets this ticket's creation timestamp.
         /// </summary>
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; private set; }
 
-
         /// <summary>
         /// Gets the key-value pairs containing the names and values of custom fields.
         /// </summary>
         [JsonProperty("custom_fields")]
         public Dictionary<string, object> CustomFields { get; private set; }
-        
+
+        /// <summary>
+        /// Gets the data type of the object.
+        /// </summary>
+        public FreshdeskObjectKind DataType
+        {
+            get { return FreshdeskObjectKind.Ticket; }
+        }
 
         /// <summary>
         /// Gets the content of the ticket in plain-text.
@@ -159,7 +161,6 @@ namespace Freshdesk.Schema
         [JsonProperty("is_escalated")]
         public bool IsEscalated { get; private set; }
 
-
         /// <summary>
         /// Gets or sets the phone number of the requester.
         /// </summary>
@@ -169,13 +170,11 @@ namespace Freshdesk.Schema
         [JsonProperty("phone")]
         public string PhoneNumber { get; set; }
 
-
         /// <summary>
         /// Gets or sets the priority of the ticket.
         /// </summary>
         [JsonProperty("priority")]
         public TicketPriority Priority { get; set; }
-
 
         /// <summary>
         /// Gets or sets the ID of the product to which the ticket is associated.
@@ -183,13 +182,11 @@ namespace Freshdesk.Schema
         [JsonProperty("product_id", NullValueHandling = NullValueHandling.Ignore)]
         public long ProductId { get; set; }
 
-
         /// <summary>
         /// Gets the email addresses to which the ticket was originally sent.
         /// </summary>
         [JsonProperty("to_emails", NullValueHandling = NullValueHandling.Ignore)]
         public string[] Recipients { get; private set; }
-
 
         /// <summary>
         /// Gets or sets the user ID of the requester.
@@ -197,13 +194,11 @@ namespace Freshdesk.Schema
         [JsonProperty("requester_id")]
         public long RequesterId { get; set; }
 
-
         /// <summary>
         /// Gets or sets the name of the requester.
         /// </summary>
         [JsonProperty("name")]
         public string RequesterName { get; set; }
-
 
         /// <summary>
         /// Gets or sets the channel through which the ticket was created.
@@ -211,13 +206,11 @@ namespace Freshdesk.Schema
         [JsonProperty("source")]
         public TicketSource Source { get; set; }
 
-
         /// <summary>
         /// Gets whether the ticket has been marked as spam.
         /// </summary>
         [JsonProperty("spam")]
         public bool Spam { get; private set; }
-
 
         /// <summary>
         /// Gets or sets the status of the ticket.
@@ -225,20 +218,17 @@ namespace Freshdesk.Schema
         [JsonProperty("status")]
         public int Status { get; set; }
 
-
         /// <summary>
         /// Gets or sets the subject of the ticket.
         /// </summary>
         [JsonProperty("subject")]
         public string Subject { get; set; }
 
-
         /// <summary>
         /// Gets or sets the tags that have been associated with the ticket.
         /// </summary>
         [JsonProperty("tags")]
         public string[] Tags { get; set; }
-
 
         /// <summary>
         /// Gets or sets the Twitter handle of the requester.
@@ -249,13 +239,11 @@ namespace Freshdesk.Schema
         [JsonProperty("twitter_id")]
         public string TwitterId { get; set; }
 
-
         /// <summary>
         /// Gets or sets the issue category that describes the ticket.
         /// </summary>
         [JsonProperty("type")]
         public string Type { get; set; }
-
 
         /// <summary>
         /// Gets the ticket's last updated timestamp.

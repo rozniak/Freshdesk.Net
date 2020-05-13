@@ -12,6 +12,11 @@ namespace Freshdesk.Schema
     public interface IFreshdeskObject
     {
         /// <summary>
+        /// Gets the date the object was created.
+        /// </summary>
+        DateTime CreatedAt { get; }
+
+        /// <summary>
         /// Gets the data type of the object.
         /// </summary>
         FreshdeskObjectKind DataType { get; }
@@ -20,5 +25,10 @@ namespace Freshdesk.Schema
         /// Gets the unique ID of the object.
         /// </summary>
         long Id { get; }
+
+        /// <summary>
+        /// Gets the date the object was updated.
+        /// </summary>
+        DateTime UpdatedAt { get; }
     }
 }

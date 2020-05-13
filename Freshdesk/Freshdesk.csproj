@@ -75,6 +75,7 @@
     <Compile Include="Schema\ContactAvatar.cs" />
     <Compile Include="Schema\ConversationSource.cs" />
     <Compile Include="Schema\FreshdeskObjectKind.cs" />
+    <Compile Include="Schema\IFreshdeskObject.cs" />
     <Compile Include="Schema\Ticket.cs" />
     <Compile Include="Schema\Conversation.cs" />
     <Compile Include="Schema\TicketPriority.cs" />

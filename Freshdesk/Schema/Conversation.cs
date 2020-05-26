@@ -172,7 +172,7 @@ namespace Freshdesk.Schema
         /// <summary>
         /// Gets or sets the ID of the user that created this conversation.
         /// </summary>
-        public long UserId
+        public long? UserId
         {
             get { return _UserId; }
             set
@@ -184,8 +184,8 @@ namespace Freshdesk.Schema
             }
         }
 
-        [JsonProperty("user_id")]
-        private long _UserId;
+        [JsonProperty("user_id", NullValueHandling = NullValueHandling.Include)]
+        private long? _UserId;
 
 
         /// <summary>

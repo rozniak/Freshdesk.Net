@@ -1,4 +1,5 @@
 ﻿using Freshdesk.Schema;
+using System;
 using System.Collections.Generic;
 
 namespace Freshdesk.Framework
@@ -8,6 +9,29 @@ namespace Freshdesk.Framework
     /// </summary>
     public sealed class FreshdeskObjectComparer : IEqualityComparer<IFreshdeskObject>
     {
+        /// <summary>
+        /// Gets or sets the enumeration value that specifies how the objects will be
+        /// compared.
+        /// </summary>
+        public FreshdeskObjectComparison ComparisonType { get; private set; }
+
+
+        /// <summary>
+        /// Initializes a new instance of the FreshdeskObjectComparer class using the
+        /// specified comparison type.
+        /// </summary>
+        /// <param name="comparisonType">
+        /// One of the enumeration values that specifies how the objects will be
+        /// compared.
+        /// </param>
+        public FreshdeskObjectComparer(
+            FreshdeskObjectComparison comparisonType
+        )
+        {
+            ComparisonType = comparisonType;
+        }
+
+
         /// <summary>
         /// Determines whether the specified objects are equal.
         /// </summary>
@@ -38,8 +62,20 @@ namespace Freshdesk.Framework
                 return false;
             }
 
-            return x.Id        == y.Id &&
-                   x.UpdatedAt == y.UpdatedAt;
+            switch (ComparisonType)
+            {
+                case FreshdeskObjectComparison.IdOnly:
+                    return x.Id == y.Id;
+
+                case FreshdeskObjectComparison.Strict:
+                    return x.Id        == y.Id &&
+                           x.UpdatedAt == y.UpdatedAt;
+
+                default:
+                    throw new ArgumentException(
+                        "No handler for the given comparison type."
+                    );
+            }
         }
 
         /// <summary>
@@ -60,7 +96,19 @@ namespace Freshdesk.Framework
                 return 0;
             }
 
-            return obj.Id.GetHashCode() ^ obj.UpdatedAt.GetHashCode();
+            switch (ComparisonType)
+            {
+                case FreshdeskObjectComparison.IdOnly:
+                    return obj.Id.GetHashCode();
+
+                case FreshdeskObjectComparison.Strict:
+                    return obj.Id.GetHashCode() ^ obj.UpdatedAt.GetHashCode();
+
+                default:
+                    throw new ArgumentException(
+                        "No handler for the given comparison type."
+                    );
+            }
         }
     }
 }

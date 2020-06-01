@@ -64,6 +64,7 @@
     <Compile Include="CreateCustomerRequest.cs" />
     <Compile Include="CreateTicketInfo.cs" />
     <Compile Include="CreateTicketRequest.cs" />
+    <Compile Include="Framework\FreshdeskObjectComparison.cs" />
     <Compile Include="Framework\FreshdeskObjectComparer.cs" />
     <Compile Include="GetTimeResponse.cs" />
     <Compile Include="GetUserResponse.cs" />

@@ -300,8 +300,9 @@ namespace Freshdesk.Schema
         /// <summary>
         /// Retrieves the conversations of this ticket.
         /// </summary>
+        /// <param name="page">The page number.</param>
         /// <returns>The conversations of this ticket as a read-only IList&lt;Conversation&gt; conversation.</returns>
-        public async Task<IList<Conversation>> GetConversations()
+        public async Task<IList<Conversation>> GetConversations(int page)
         {
             if (JsonConversations != null)
                 return JsonConversations;
@@ -309,7 +310,7 @@ namespace Freshdesk.Schema
             if (FreshdeskConnection == null)
                 throw new InvalidOperationException("Ticket.InitializeConversations: No Freshdesk connection has been provided for this ticket.");
             
-            return await FreshdeskConnection.GetTicketConversations(Id);
+            return await FreshdeskConnection.GetTicketConversations(Id, page);
         }
     }
 }

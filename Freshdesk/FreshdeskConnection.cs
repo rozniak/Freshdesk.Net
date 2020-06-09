@@ -198,10 +198,14 @@ namespace Freshdesk
         /// Gets all conversations on a ticket from the helpdesk by the ticket's ID.
         /// </summary>
         /// <param name="ticketId">The ID of the ticket.</param>
+        /// <param name="page">The page number.</param>
         /// <returns>A list of conversations from the specified ticket as an IList&lt;Conversation&gt; collection.</returns>
-        public async Task<IList<Conversation>> GetTicketConversations(long ticketId)
+        public async Task<IList<Conversation>> GetTicketConversations(long ticketId, int page)
         {
-            var result = (IList<object>)await FreshHttpsHelper.DoRequest<IList<Conversation>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets/" + ticketId.ToString() + "/conversations"), this);
+            if (page < 1)
+                throw new ArgumentOutOfRangeException("FreshdeskConnection.GetTicketConversations: Parameter 'page' out of range, value must be 1 or greater.");
+            
+            var result = (IList<object>)await FreshHttpsHelper.DoRequest<IList<Conversation>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets/" + ticketId.ToString() + "/conversations?page=" + page), this);
 
             return CastReadOnlyList<Conversation>(result);
         }

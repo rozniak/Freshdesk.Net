@@ -205,7 +205,7 @@ namespace Freshdesk
             if (page < 1)
                 throw new ArgumentOutOfRangeException("FreshdeskConnection.GetTicketConversations: Parameter 'page' out of range, value must be 1 or greater.");
             
-            var result = (IList<object>)await FreshHttpsHelper.DoRequest<IList<Conversation>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets/" + ticketId.ToString() + "/conversations?page=" + page), this);
+            var result = (IList<object>)await FreshHttpsHelper.DoRequest<IList<Conversation>>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets/" + ticketId.ToString() + "/conversations", "page=" + page), this);
 
             return CastReadOnlyList<Conversation>(result);
         }

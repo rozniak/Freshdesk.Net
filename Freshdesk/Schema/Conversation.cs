@@ -197,6 +197,11 @@ namespace Freshdesk.Schema
         /// <summary>
         /// Initializes a new instance of the Conversation class.
         /// </summary>
+        public Conversation() { }
+
+        /// <summary>
+        /// Initializes a new instance of the Conversation class.
+        /// </summary>
         /// <param name="fdConn">The Freshdesk connection used to acquire this conversation.</param>
         public Conversation(FreshdeskConnection fdConn = null)
         {

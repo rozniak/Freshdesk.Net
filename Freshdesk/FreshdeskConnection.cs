@@ -10,6 +10,7 @@
  * Sharing, editing and general licence term information can be found inside of the "LICENSE.MD" file that should be located in the root of this project's directory structure.
  */
 
+using Freshdesk.Internal;
 using Freshdesk.Schema;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,16 @@ namespace Freshdesk
         /// <summary>
         /// Gets or sets the URI of the API endpoint.
         /// </summary>
-        public Uri ApiEndpoint { get; private set; }
+        public Uri ApiEndpoint
+        {
+            get { return Endpoint.BaseUri; }
+        }
+
+
+        /// <summary>
+        /// The communication layer for performing the API calls to Freshdesk.
+        /// </summary>
+        private FreshdeskEndpoint Endpoint { get; set; }
 
 
         /// <summary>
@@ -45,11 +55,17 @@ namespace Freshdesk
             string apiKey
         )
         {
+            Endpoint = new FreshdeskEndpoint(this, apiEndpoint, apiKey);
+
+            // TODO: Bin once FreshHttpsHelper has been replaced by better code
+            //
             FreshHttpsHelper.AuthorizationKey = apiKey;
-            ApiEndpoint                       = apiEndpoint;
 
             // Use TLS 1.2. Anything lower is deprecated in the Freshdesk API as of
             // 2020-04-30
+            //
+            // FIXME: Really this should probably be set by the application and not
+            //        this library...?
             //
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
         }
@@ -120,49 +136,22 @@ namespace Freshdesk
         }
 
         /// <summary>
-        /// Gets a list of agents from the helpdesk.
+        /// Gets agents from Freshdesk.
         /// </summary>
-        /// <param name="page">
-        /// The page number.
-        /// </param>
-        /// <param name="quantity">
-        /// The max number of agents to return on a given page. The maximum Freshdesk
-        /// will accept is 100.
+        /// <param name="queries">
+        /// An array of queries for the request.
         /// </param>
         /// <returns>
-        /// A list of agents from the specified page, with a specified maximum amount
-        /// of results, as an IList&lt;Agent&gt; collection.
+        /// The agents that were downloaded from Freshdesk as an
+        /// <see cref="IList{Agent}"/> collection.
         /// </returns>
-        public async Task<IList<Agent>> GetAgents(
-            int page,
-            int quantity = 30
+        public async Task<IEnumerable<Agent>> GetAgents(
+            params FreshdeskQuery[] queries
         )
         {
-            if (quantity < 1 || quantity > 100)
-            {
-                throw new ArgumentOutOfRangeException(
-                    "Parameter 'quantity' out of range, accepted values are between 1 and 100 inclusive."
-                );
-            }
+            var results = await Endpoint.GetItems(FreshdeskObjectKind.Agent, queries);
 
-            if (page < 1)
-            {
-                throw new ArgumentOutOfRangeException(
-                    "Parameter 'page' out of range, value must be 1 or greater."
-                );
-            }
-
-            var result =
-                (IList<object>) await FreshHttpsHelper.DoRequest<IList<Agent>>(
-                    FreshHttpsHelper.UriForPath(
-                        ApiEndpoint,
-                        "/api/v2/agents",
-                        "page=" + page.ToString() + "&per_page=" + quantity.ToString()
-                    ),
-                    this
-                );
-
-            return CastReadOnlyList<Agent>(result);
+            return results.Cast<Agent>();
         }
 
         /// <summary>

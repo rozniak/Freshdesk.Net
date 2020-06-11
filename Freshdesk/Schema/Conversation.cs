@@ -21,7 +21,7 @@ namespace Freshdesk.Schema
     /// Represents a conversation on a ticket.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public sealed class Conversation : IFreshdeskObject
+    public sealed class Conversation : FreshdeskObject
     {
         /// <summary>
         /// Gets the collection of email addresses that are in the BCC field of the outgoing ticket email.
@@ -64,15 +64,9 @@ namespace Freshdesk.Schema
 
 
         /// <summary>
-        /// Gets the creation date of this conversation.
+        /// Gets or sets the data type of the object.
         /// </summary>
-        [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; private set; }
-
-        /// <summary>
-        /// Gets the data type of the object.
-        /// </summary>
-        public FreshdeskObjectKind DataType
+        public override FreshdeskObjectKind DataType
         {
             get { return FreshdeskObjectKind.Conversation; }
         }
@@ -84,17 +78,10 @@ namespace Freshdesk.Schema
         public string HtmlBody { get; set; }
 
         /// <summary>
-        /// Gets the unique ID of the conversation.
-        /// </summary>
-        [JsonProperty("id")]
-        public long Id { get; private set; }
-
-        /// <summary>
         /// Gets or sets the value that indicates whether this conversation should appear as though it was created from outside of Freshdesk.
         /// </summary>
         [JsonProperty("incoming")]
         public bool Incoming { get; set; }
-
 
         /// <summary>
         /// Gets or sets the value that indicates whether this is a private note.
@@ -162,12 +149,6 @@ namespace Freshdesk.Schema
         /// </summary>
         [JsonProperty("ticket_id")]
         public long TicketId { get; private set; }
-
-        /// <summary>
-        /// Gets the last updated date of this conversation.
-        /// </summary>
-        [JsonProperty("updated_at")]
-        public DateTime UpdatedAt { get; private set; }
 
         /// <summary>
         /// Gets or sets the ID of the user that created this conversation.

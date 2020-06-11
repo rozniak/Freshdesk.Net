@@ -48,12 +48,16 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UrlCombineLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\src\packages\UrlCombine.2.0.0\lib\net40\UrlCombineLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attachment.cs" />
@@ -64,20 +68,26 @@
     <Compile Include="CreateCustomerRequest.cs" />
     <Compile Include="CreateTicketInfo.cs" />
     <Compile Include="CreateTicketRequest.cs" />
+    <Compile Include="Framework\FreshdeskJson.cs" />
     <Compile Include="Framework\FreshdeskObjectComparison.cs" />
     <Compile Include="Framework\FreshdeskObjectComparer.cs" />
+    <Compile Include="Framework\FreshdeskUtility.cs" />
     <Compile Include="GetTimeResponse.cs" />
     <Compile Include="GetUserResponse.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HelpdeskError.cs" />
     <Compile Include="FreshHttpsHelper.cs" />
+    <Compile Include="FreshdeskQuery.cs" />
+    <Compile Include="Internal\FreshdeskEndpoint.cs" />
+    <Compile Include="PaginationQuery.cs" />
+    <Compile Include="QuantityQuery.cs" />
     <Compile Include="Schema\Agent.cs" />
     <Compile Include="Schema\Company.cs" />
     <Compile Include="Schema\Contact.cs" />
     <Compile Include="Schema\ContactAvatar.cs" />
     <Compile Include="Schema\ConversationSource.cs" />
     <Compile Include="Schema\FreshdeskObjectKind.cs" />
-    <Compile Include="Schema\IFreshdeskObject.cs" />
+    <Compile Include="Schema\FreshdeskObject.cs" />
     <Compile Include="Schema\Ticket.cs" />
     <Compile Include="Schema\Conversation.cs" />
     <Compile Include="Schema\TicketPriority.cs" />

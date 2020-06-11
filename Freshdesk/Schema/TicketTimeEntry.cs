@@ -20,7 +20,7 @@ namespace Freshdesk.Schema
     /// Represents a Freshdesk time entry.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public sealed class TicketTimeEntry : IFreshdeskObject
+    public sealed class TicketTimeEntry : FreshdeskObject
     {
         /// <summary>
         /// Gets or sets the ID of the agent to which this time entry belongs.
@@ -39,17 +39,11 @@ namespace Freshdesk.Schema
         /// </summary>
         [JsonProperty("company_id", NullValueHandling = NullValueHandling.Ignore)]
         public long CompanyId { get; private set; }
-        
-        /// <summary>
-        /// Gets or sets the creation date of this time entry.
-        /// </summary>
-        [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; private set; }
 
         /// <summary>
-        /// Gets the data type of the object.
+        /// Gets or sets the data type of the object.
         /// </summary>
-        public FreshdeskObjectKind DataType
+        public override FreshdeskObjectKind DataType
         {
             get { return FreshdeskObjectKind.TimeEntry; }
         }
@@ -65,12 +59,6 @@ namespace Freshdesk.Schema
         /// </summary>
         [JsonProperty("note")]
         public string Note { get; set; }
-
-        /// <summary>
-        /// Gets the unique ID of the time entry.
-        /// </summary>
-        [JsonProperty("id")]
-        public long Id { get; private set; }
 
         /// <summary>
         /// Gets or sets the start date of this time entry.
@@ -114,12 +102,6 @@ namespace Freshdesk.Schema
         }
         [JsonProperty("time_spent")]
         private string _TimeSpent { get; set; }
-
-        /// <summary>
-        /// Gets or sets the last updated date of this time entry.
-        /// </summary>
-        [JsonProperty("updated_at")]
-        public DateTime UpdatedAt { get; private set; }
 
 
         /// <summary>

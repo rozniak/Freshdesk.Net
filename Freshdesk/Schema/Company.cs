@@ -21,14 +21,8 @@ namespace Freshdesk.Schema
     /// Represents a Freshdesk company.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public sealed class Company : IFreshdeskObject
+    public sealed class Company : FreshdeskObject
     {
-        /// <summary>
-        /// Gets the company's creation timestamp.
-        /// </summary>
-        [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; private set; }
-
         /// <summary>
         /// Gets the key-value pairs containing the names and values of custom fields.
         /// </summary>
@@ -36,9 +30,9 @@ namespace Freshdesk.Schema
         public Dictionary<string, object> CustomFields { get; private set; }
 
         /// <summary>
-        /// Gets the data type of the object.
+        /// Gets or sets the data type of the object.
         /// </summary>
-        public FreshdeskObjectKind DataType
+        public override FreshdeskObjectKind DataType
         {
             get { return FreshdeskObjectKind.Company; }
         }
@@ -56,12 +50,6 @@ namespace Freshdesk.Schema
         public List<string> Domains { get; private set; }
 
         /// <summary>
-        /// Gets the unique ID of the company.
-        /// </summary>
-        [JsonProperty("id")]
-        public long Id { get; private set; }
-
-        /// <summary>
         /// Gets or sets the name of the company.
         /// </summary>
         [JsonProperty("name")]
@@ -72,12 +60,6 @@ namespace Freshdesk.Schema
         /// </summary>
         [JsonProperty("note", NullValueHandling = NullValueHandling.Ignore)]
         public string Note { get; set; }
-
-        /// <summary>
-        /// Gets the company's last updated timestamp.
-        /// </summary>
-        [JsonProperty("updated_at")]
-        public DateTime UpdatedAt { get; private set; }
 
 
         /// <summary>

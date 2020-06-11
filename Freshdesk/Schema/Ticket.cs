@@ -22,7 +22,7 @@ namespace Freshdesk.Schema
     /// Represents a Freshdesk ticket.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public sealed class Ticket : IFreshdeskObject
+    public sealed class Ticket : FreshdeskObject
     {
         // TODO: Add attachments property
 
@@ -55,21 +55,15 @@ namespace Freshdesk.Schema
         public string[] CopiedInRecipientsOnReply { get; private set; }
 
         /// <summary>
-        /// Gets this ticket's creation timestamp.
-        /// </summary>
-        [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; private set; }
-
-        /// <summary>
         /// Gets the key-value pairs containing the names and values of custom fields.
         /// </summary>
         [JsonProperty("custom_fields")]
         public Dictionary<string, object> CustomFields { get; private set; }
 
         /// <summary>
-        /// Gets the data type of the object.
+        /// Gets or sets the data type of the object.
         /// </summary>
-        public FreshdeskObjectKind DataType
+        public override FreshdeskObjectKind DataType
         {
             get { return FreshdeskObjectKind.Ticket; }
         }
@@ -139,12 +133,6 @@ namespace Freshdesk.Schema
         /// </summary>
         [JsonProperty("description")]
         public string HtmlDescription { get; set; }
-
-        /// <summary>
-        /// Gets the unique ID of the ticket.
-        /// </summary>
-        [JsonProperty("id")]
-        public long Id { get; private set; }
 
         /// <summary>
         /// Determines whether this ticket has been deleted.
@@ -244,12 +232,6 @@ namespace Freshdesk.Schema
         /// </summary>
         [JsonProperty("type")]
         public string Type { get; set; }
-
-        /// <summary>
-        /// Gets the ticket's last updated timestamp.
-        /// </summary>
-        [JsonProperty("updated_at")]
-        public DateTime UpdatedAt { get; private set; }
 
         
         /// <summary>

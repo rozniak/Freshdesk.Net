@@ -20,7 +20,7 @@ namespace Freshdesk.Schema
     /// Represents a Freshdesk agent
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public sealed class Agent : IFreshdeskObject
+    public sealed class Agent : FreshdeskObject
     {
         /// <summary>
         /// Gets or sets the value that indicates whether this agent is accepting new tickets.
@@ -41,15 +41,9 @@ namespace Freshdesk.Schema
         public Contact Contact { get; set; }
 
         /// <summary>
-        /// Gets the agent's creation timestamp.
+        /// Gets or sets the data type of the object.
         /// </summary>
-        [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; private set; }
-
-        /// <summary>
-        /// Gets the data type of the object.
-        /// </summary>
-        public FreshdeskObjectKind DataType
+        public override FreshdeskObjectKind DataType
         {
             get { return FreshdeskObjectKind.Agent; }
         }
@@ -65,12 +59,6 @@ namespace Freshdesk.Schema
         /// </summary>
         [JsonProperty("signature", NullValueHandling = NullValueHandling.Ignore)]
         public string HtmlSignature { get; set; }
-
-        /// <summary>
-        /// Gets the unique ID of the agent.
-        /// </summary>
-        [JsonProperty("id")]
-        public long Id { get; private set; }
 
         /// <summary>
         /// Gets or sets the value that indicates whether this agent is only occasionally an agent.
@@ -89,12 +77,6 @@ namespace Freshdesk.Schema
         /// </summary>
         [JsonProperty("ticket_scope")]
         public TicketScope TicketScope { get; set; }
-
-        /// <summary>
-        /// Gets the agent's last updated timestamp.
-        /// </summary>
-        [JsonProperty("updated_at")]
-        public DateTime UpdatedAt { get; private set; }
 
 
         /// <summary>

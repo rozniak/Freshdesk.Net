@@ -5,9 +5,9 @@ using System.Collections.Generic;
 namespace Freshdesk.Framework
 {
     /// <summary>
-    /// Provides methods for comparing <see cref="IFreshdeskObject"/> instances.
+    /// Provides methods for comparing <see cref="FreshdeskObject"/> instances.
     /// </summary>
-    public sealed class FreshdeskObjectComparer : IEqualityComparer<IFreshdeskObject>
+    public sealed class FreshdeskObjectComparer : IEqualityComparer<FreshdeskObject>
     {
         /// <summary>
         /// Gets or sets the enumeration value that specifies how the objects will be
@@ -45,8 +45,8 @@ namespace Freshdesk.Framework
         /// True if the specified objects are equal; otherwise, false.
         /// </returns>
         public bool Equals(
-            IFreshdeskObject x,
-            IFreshdeskObject y
+            FreshdeskObject x,
+            FreshdeskObject y
         )
         {
             if (object.ReferenceEquals(x, y))
@@ -88,7 +88,7 @@ namespace Freshdesk.Framework
         /// A hash code for the specified object.
         /// </returns>
         public int GetHashCode(
-            IFreshdeskObject obj
+            FreshdeskObject obj
         )
         {
             if (object.ReferenceEquals(obj, null))

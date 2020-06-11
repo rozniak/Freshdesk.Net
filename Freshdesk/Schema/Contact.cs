@@ -21,7 +21,7 @@ namespace Freshdesk.Schema
     /// Represents a Freshdesk contact.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public sealed class Contact : IFreshdeskObject
+    public sealed class Contact : FreshdeskObject
     {
         /// <summary>
         /// Gets whether this contact is active.
@@ -54,21 +54,15 @@ namespace Freshdesk.Schema
         public long CompanyId { get; set; }
 
         /// <summary>
-        /// Gets the creation date of this contact.
-        /// </summary>
-        [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; private set; }
-
-        /// <summary>
         /// Gets the key-value pairs containing the names and values of custom fields.
         /// </summary>
         [JsonProperty("custom_fields")]
         public Dictionary<string, object> CustomFields { get; private set; }
 
         /// <summary>
-        /// Gets the data type of the object.
+        /// Gets or sets the data type of the object.
         /// </summary>
-        public FreshdeskObjectKind DataType
+        public override FreshdeskObjectKind DataType
         {
             get { return FreshdeskObjectKind.Contact; }
         }
@@ -84,12 +78,6 @@ namespace Freshdesk.Schema
         /// </summary>
         [JsonProperty("email")]
         public string Email { get; set; }
-
-        /// <summary>
-        /// Gets the unique ID of the contact.
-        /// </summary>
-        [JsonProperty("id")]
-        public long Id { get; private set; }
 
         /// <summary>
         /// Determines whether this contact has been deleted.
@@ -153,12 +141,6 @@ namespace Freshdesk.Schema
         /// Gets or sets the other emails assigned to this contact.
         /// </summary>
         public string[] OtherEmails { get; set; }
-
-        /// <summary>
-        /// Gets or sets the last updated date of this contact.
-        /// </summary>
-        [JsonProperty("updated_at")]
-        public DateTime UpdatedAt { get; private set; }
 
 
         /// <summary>

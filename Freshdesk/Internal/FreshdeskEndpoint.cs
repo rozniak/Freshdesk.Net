@@ -101,19 +101,25 @@ namespace Freshdesk.Internal
             params FreshdeskQuery[] queries
         )
         {
-            WebRequest request = SetupRequest(
-                                     HttpMethod.Get,
-                                     BuildUri(
-                                         BaseUri,
-                                         dataType,
-                                         queries,
-                                         id
-                                     ),
-                                     ApiKey
-                                 );
-            string response    = await ReadWebResponse(request);
+            WebRequest request       = SetupRequest(
+                                           HttpMethod.Get,
+                                           BuildUri(
+                                               BaseUri,
+                                               dataType,
+                                               queries,
+                                               id
+                                           ),
+                                           ApiKey
+                                       );
+            string          response = await ReadWebResponse(request);
+            FreshdeskObject result   = FreshdeskJson.DeserializeToType(
+                                           dataType,
+                                           response
+                                       );
 
-            return FreshdeskJson.DeserializeToType(dataType, response);
+            result.Freshdesk = ApiWrapperRef;
+
+            return result;
         }
 
         /// <summary>
@@ -145,7 +151,9 @@ namespace Freshdesk.Internal
                                  );
             string response    = await ReadWebResponse(request);
 
-            return FreshdeskJson.DeserializeToCollection(dataType, response);
+            return PrepareResults(
+                FreshdeskJson.DeserializeToCollection(dataType, response)
+            );
         }
 
         /// <summary>
@@ -188,7 +196,9 @@ namespace Freshdesk.Internal
                                  );
             string response    = await ReadWebResponse(request);
 
-            return FreshdeskJson.DeserializeToCollection(subDataType, response);
+            return PrepareResults(
+                FreshdeskJson.DeserializeToCollection(subDataType, response)
+            );
         }
 
 
@@ -263,6 +273,29 @@ namespace Freshdesk.Internal
             builder.Query = FreshdeskQuery.ComposeAll(queries);
 
             return builder.Uri;
+        }
+
+        /// <summary>
+        /// Prepares the objects in the result collection before they are returned to
+        /// the API caller.
+        /// </summary>
+        /// <param name="results">
+        /// The downloaded Freshdesk items.
+        /// </param>
+        /// <returns>
+        /// The same collection passed in, with the items themselves having been
+        /// prepared for returning to the public API.
+        /// </returns>
+        private IEnumerable<FreshdeskObject> PrepareResults(
+            IEnumerable<FreshdeskObject> results
+        )
+        {
+            foreach (FreshdeskObject item in results)
+            {
+                item.Freshdesk = ApiWrapperRef;
+            }
+
+            return results;
         }
 
         /// <summary>

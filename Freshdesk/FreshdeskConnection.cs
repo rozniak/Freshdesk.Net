@@ -155,49 +155,25 @@ namespace Freshdesk
         }
 
         /// <summary>
-        /// Gets a list of companies from the helpdesk.
+        /// Gets companies from Freshdesk.
         /// </summary>
-        /// <param name="page">
-        /// The page number.
-        /// </param>
-        /// <param name="quantity">
-        /// The max number of companies to return on a given page. The maximum
-        /// Freshdesk will accept is 100.
+        /// <param name="queries">
+        /// An array of queries for the request.
         /// </param>
         /// <returns>
-        /// A list of companies from the specified page, with a specified maximum
-        /// amount of results, as an IList&lt;Company&gt; collection.
+        /// The companies that were downloaded from Freshdesk as an
+        /// <see cref="IEnumerable{Company}"/> collection.
         /// </returns>
-        public async Task<IList<Company>> GetCompanies(
-            int page,
-            int quantity = 30
+        public async Task<IEnumerable<Company>> GetCompanies(
+            params FreshdeskQuery[] queries
         )
         {
-            if (quantity < 1 || quantity > 100)
-            {
-                throw new ArgumentOutOfRangeException(
-                    "Parameter 'quantity' out of range, accepted values are between 1 and 100 inclusive."
-                );
-            }
+            var results = await Endpoint.GetItems(
+                              FreshdeskObjectKind.Company,
+                              queries
+                          );
 
-            if (page < 1)
-            {
-                throw new ArgumentOutOfRangeException(
-                    "Parameter 'page' out of range, value must be 1 or greater."
-                );
-            }
-
-            var result =
-                (IList<object>) await FreshHttpsHelper.DoRequest<IList<Company>>(
-                    FreshHttpsHelper.UriForPath(
-                        ApiEndpoint,
-                        "/api/v2/companies",
-                        "page=" + page.ToString() + "&per_page=" + quantity.ToString()
-                    ),
-                    this
-                );
-
-            return CastReadOnlyList<Company>(result);
+            return results.Cast<Company>();
         }
 
         /// <summary>

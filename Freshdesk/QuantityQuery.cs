@@ -24,7 +24,9 @@ namespace Freshdesk
         /// Initializes a new instance of the QuantityQuery class using the specified
         /// parameter.
         /// </summary>
-        /// <param name="quantity"></param>
+        /// <param name="quantity">
+        /// The quantity.
+        /// </param>
         public QuantityQuery(
             int quantity
         )

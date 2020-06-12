@@ -61,6 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attachment.cs" />
+    <Compile Include="ContactFilterQuery.cs" />
+    <Compile Include="ContactFilterState.cs" />
     <Compile Include="CreateTicketOptions.cs" />
     <Compile Include="CreateTimeInfo.cs" />
     <Compile Include="CreateTimeRequest.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="CreateCustomerRequest.cs" />
     <Compile Include="CreateTicketInfo.cs" />
     <Compile Include="CreateTicketRequest.cs" />
+    <Compile Include="TicketFilterQuery.cs" />
     <Compile Include="Framework\FreshdeskJson.cs" />
     <Compile Include="Framework\FreshdeskObjectComparison.cs" />
     <Compile Include="Framework\FreshdeskObjectComparer.cs" />
@@ -94,6 +97,8 @@
     <Compile Include="Schema\TicketScope.cs" />
     <Compile Include="Schema\TicketSource.cs" />
     <Compile Include="Schema\TicketTimeEntry.cs" />
+    <Compile Include="TicketFilterState.cs" />
+    <Compile Include="UpdatedSinceQuery.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="GetCustomerResponse.cs" />

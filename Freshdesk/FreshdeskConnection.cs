@@ -113,25 +113,26 @@ namespace Freshdesk
         }
 
         /// <summary>
-        /// Gets an agent from the helpdesk by their ID.
+        /// Gets an agent from Freshdesk.
         /// </summary>
         /// <param name="id">
         /// The ID of the agent.
         /// </param>
+        /// <param name="queries">
+        /// An array of queries for the request.
+        /// </param>
         /// <returns>
-        /// An Agent object populated with company data retrieved from Freshdesk if the
-        /// ID was found, null otherwise.
+        /// The agent associated with the specified ID.
         /// </returns>
         public async Task<Agent> GetAgent(
-            long id
+            long                    id,
+            params FreshdeskQuery[] queries
         )
         {
-            return (Agent) await FreshHttpsHelper.DoRequest<Agent>(
-                FreshHttpsHelper.UriForPath(
-                    ApiEndpoint,
-                    "/api/v2/agents/" + id.ToString()
-                ),
-                this
+            return (Agent) await Endpoint.GetItem(
+                FreshdeskObjectKind.Agent,
+                id,
+                queries
             );
         }
 
@@ -149,7 +150,10 @@ namespace Freshdesk
             params FreshdeskQuery[] queries
         )
         {
-            var results = await Endpoint.GetItems(FreshdeskObjectKind.Agent, queries);
+            var results = await Endpoint.GetItems(
+                              FreshdeskObjectKind.Agent,
+                              queries
+                          );
 
             return results.Cast<Agent>();
         }
@@ -177,368 +181,169 @@ namespace Freshdesk
         }
 
         /// <summary>
-        /// Gets a company from the helpdesk by its ID.
+        /// Gets a company from Freshdesk.
         /// </summary>
         /// <param name="id">
         /// The ID of the company.
         /// </param>
+        /// <param name="queries">
+        /// An array of queries for the request.
+        /// </param>
         /// <returns>
-        /// A Company object populated with company data retrieved from Freshdesk if
-        /// the ID was found, null otherwise.
+        /// The company associated with the specified ID.
         /// </returns>
         public async Task<Company> GetCompany(
-            long id
+            long                    id,
+            params FreshdeskQuery[] queries
         )
         {
-            return (Company) await FreshHttpsHelper.DoRequest<Company>(
-                FreshHttpsHelper.UriForPath(
-                    ApiEndpoint,
-                    "/api/v2/companies/" + id.ToString()
-                ),
-                this
+            return (Company) await Endpoint.GetItem(
+                FreshdeskObjectKind.Company,
+                id,
+                queries
             );
         }
 
         /// <summary>
-        /// Gets a contact from the helpdesk by their ID.
+        /// Gets a contact from Freshdesk
         /// </summary>
         /// <param name="id">
         /// The ID of the contact.
         /// </param>
+        /// <param name="queries">
+        /// An array of queries for the request.
+        /// </param>
         /// <returns>
-        /// A Contact object populated with contact data retrieved from Freshdesk if
-        /// the ID was found, null otherwise.
+        /// The contact associated with the specified ID.
         /// </returns>
         public async Task<Contact> GetContact(
-            long id
+            long                    id,
+            params FreshdeskQuery[] queries
         )
         {
-            return (Contact) await FreshHttpsHelper.DoRequest<Contact>(
-                FreshHttpsHelper.UriForPath(
-                    ApiEndpoint,
-                    "/api/v2/contacts/" + id.ToString()
-                ),
-                this
+            return (Contact) await Endpoint.GetItem(
+                FreshdeskObjectKind.Contact,
+                id,
+                queries
             );
         }
 
         /// <summary>
-        /// Gets a list of contacts from the helpdesk.
+        /// Gets contacts from Freshdesk.
         /// </summary>
-        /// <param name="page">
-        /// The page number.
-        /// </param>
-        /// <param name="applyDeletedFilter">
-        /// True to filter this request to deleted contacts only.
-        /// </param>
-        /// <param name="quantity">
-        /// The max number of contacts to return on a given page. The maximum Freshdesk
-        /// will accept is 100.
+        /// <param name="queries">
+        /// An array of queries for the request.
         /// </param>
         /// <returns>
-        /// A list of contacts from the specified page, with a specified maximum amount
-        /// of results, as an IList&lt;Contact&gt; collection.
+        /// The contacts that were downloaded from Freshdesk as an
+        /// <see cref="IEnumerable{Contact}"/> collection.
         /// </returns>
-        public async Task<IList<Contact>> GetContacts(
-            int  page,
-            bool applyDeletedFilter,
-            int  quantity = 30
+        public async Task<IEnumerable<Contact>> GetContacts(
+            params FreshdeskQuery[] queries
         )
         {
-            if (quantity < 1 || quantity > 100)
-            {
-                throw new ArgumentOutOfRangeException(
-                    "Parameter 'quantity' out of range, accepted values are between 1 and 100 inclusive."
-                );
-            }
+            var results = await Endpoint.GetItems(
+                              FreshdeskObjectKind.Contact,
+                              queries
+                          );
 
-            if (page < 1)
-            {
-                throw new ArgumentOutOfRangeException(
-                    "Parameter 'page' out of range, value must be 1 or greater."
-                );
-            }
-
-            var result =
-                (IList<object>)await FreshHttpsHelper.DoRequest<IList<Contact>>(
-                    FreshHttpsHelper.UriForPath(
-                        ApiEndpoint,
-                        "/api/v2/contacts",
-                        "page=" + page.ToString() + "&per_page=" + quantity.ToString() + (applyDeletedFilter ? "&state=deleted" : "")
-                    ),
-                    this
-                );
-
-            return CastReadOnlyList<Contact>(result);
+            return results.Cast<Contact>();
         }
 
         /// <summary>
-        /// Gets a ticket from the helpdesk by its ID.
+        /// Gets a ticket from Freshdesk.
         /// </summary>
         /// <param name="id">
         /// The ID of the ticket.
         /// </param>
+        /// <param name="queries">
+        /// An array of queries for the request.
+        /// </param>
         /// <returns>
-        /// A Ticket object populated with ticket data retrieved from Freshdesk if the
-        /// ID was found, null otherwise.
+        /// The ticket associated with the specified ID.
         /// </returns>
         public async Task<Ticket> GetTicket(
-            long id
+            long                    id,
+            params FreshdeskQuery[] queries
         )
         {
-            return (Ticket) await FreshHttpsHelper.DoRequest<Ticket>(
-                FreshHttpsHelper.UriForPath(
-                    ApiEndpoint,
-                    "/api/v2/tickets/" + id.ToString(), "include=company,requester"
-                ),
-                this
+            return (Ticket) await Endpoint.GetItem(
+                FreshdeskObjectKind.Ticket,
+                id,
+                queries
             );
         }
 
         /// <summary>
-        /// Gets all conversations on a ticket from the helpdesk by the ticket's ID.
+        /// Gets conversations on a ticket from Freshdesk.
         /// </summary>
         /// <param name="ticketId">
         /// The ID of the ticket.
         /// </param>
-        /// <param name="page">
-        /// The page number.
+        /// <param name="queries">
+        /// An array of queries for the request.
         /// </param>
         /// <returns>
-        /// A list of conversations from the specified ticket as an
-        /// IList&lt;Conversation&gt; collection.
+        /// The conversations on the specified ticket that were downloaded from
+        /// Freshdesk as an <see cref="IEnumerable{Conversation}"/> collection.
         /// </returns>
-        public async Task<IList<Conversation>> GetTicketConversations(
-            long ticketId,
-            int  page
+        public async Task<IEnumerable<Conversation>> GetTicketConversations(
+            long                    ticketId,
+            params FreshdeskQuery[] queries
         )
         {
-            if (page < 1)
-            {
-                throw new ArgumentOutOfRangeException(
-                    "Parameter 'page' out of range, value must be 1 or greater."
-                );
-            }
-            
-            var result =
-                (IList<object>) await FreshHttpsHelper.DoRequest<IList<Conversation>>(
-                    FreshHttpsHelper.UriForPath(
-                        ApiEndpoint,
-                        "/api/v2/tickets/" + ticketId.ToString() + "/conversations",
-                        "page=" + page
-                    ),
-                    this
-                );
-
-            return CastReadOnlyList<Conversation>(result);
-        }
-
-        /// <summary>
-        /// Gets a list of tickets from the helpdesk ticket list.
-        /// </summary>
-        /// <param name="page">
-        /// The page number.
-        /// </param>
-        /// <param name="applyDeletedFilter">
-        /// True to filter this request to deleted tickets only.
-        /// </param>
-        /// <param name="quantity">
-        /// The max number of tickets to return on a given page. The maximum Freshdesk
-        /// will accept is 100.
-        /// </param>
-        /// <returns>
-        /// A list of tickets from the specified page, with a specified maximum amount
-        /// of results, as an IList&lt;Ticket&gt; collection.
-        /// </returns>
-        public async Task<IList<Ticket>> GetTickets(
-            int  page,
-            bool applyDeletedFilter,
-            int  quantity = 30)
-        {
-            return await GetTickets(
-                page,
-                applyDeletedFilter,
-                new DateTime(2000, 1, 1),
-                quantity
+            var results = await Endpoint.GetItems(
+                FreshdeskObjectKind.Ticket,
+                ticketId,
+                FreshdeskObjectKind.Conversation,
+                queries
             );
+
+            return results.Cast<Conversation>();
         }
 
         /// <summary>
-        /// Gets a list of tickets from the helpdesk ticket list.
+        /// Gets tickets from Freshdesk.
         /// </summary>
-        /// <param name="page">
-        /// The page number.
-        /// </param>
-        /// <param name="applyDeletedFilter">
-        /// True to filter this request to deleted tickets only.
-        /// </param>
-        /// <param name="updatedSinceFilter">
-        /// The date and time of the earliest "last updated" ticket to filter by.
-        /// </param>
-        /// <param name="quantity">
-        /// The max number of tickets to return on a given page. The maximum Freshdesk
-        /// will accept is 100.
+        /// <param name="queries">
+        /// An array of queries for the request.
         /// </param>
         /// <returns>
-        /// A list of tickets from the specified page, with a specified maximum amount
-        /// of results, as an IList&lt;Ticket&gt; collection.
+        /// The tickets that were downloaded from Freshdesk as an
+        /// <see cref="IEnumerable{Ticket}"/> collection.
         /// </returns>
-        public async Task<IList<Ticket>> GetTickets(
-            int page,
-            bool applyDeletedFilter,
-            DateTime updatedSinceFilter,
-            int quantity = 30
+        public async Task<IEnumerable<Ticket>> GetTickets(
+            params FreshdeskQuery[] queries
         )
         {
-            if (quantity < 1 || quantity > 100)
-            {
-                throw new ArgumentOutOfRangeException(
-                    "Parameter 'quantity' out of range, accepted values are between 1 and 100 inclusive."
-                );
-            }
+            var results = await Endpoint.GetItems(
+                              FreshdeskObjectKind.Ticket,
+                              queries
+                          );
 
-            if (page < 1)
-            {
-                throw new ArgumentOutOfRangeException(
-                    "Parameter 'page' out of range, value must be 1 or greater."
-                );
-            }
-
-            string req = "page=" + page.ToString() + "&per_page=" + quantity.ToString() + "&updated_since=" + updatedSinceFilter.ToUniversalTime().ToString("s") + "Z" + (applyDeletedFilter ? "&filter=deleted" : "");
-
-            var result =
-                (IList<object>)await FreshHttpsHelper.DoRequest<IList<Ticket>>(
-                    FreshHttpsHelper.UriForPath(
-                        ApiEndpoint,
-                        "/api/v2/tickets",
-                        req
-                    ),
-                    this
-                );
-
-            return CastReadOnlyList<Ticket>(result);
+            return results.Cast<Ticket>();
         }
 
         /// <summary>
-        /// Gets a list of tickets from a company on the helpdesk by its ID.
+        /// Gets time entries from Freshdesk.
         /// </summary>
-        /// <param name="id">
-        /// The company ID.
-        /// </param>
-        /// <param name="page">
-        /// The page number.
-        /// </param>
-        /// <param name="quantity">
-        /// The max number of tickets to return on a given page. The maximum Freshdesk
-        /// will accept is 100.
+        /// <param name="queries">
+        /// An array of queries for the request.
         /// </param>
         /// <returns>
-        /// A list of the company's tickets from the specified page, with a specified
-        /// maximum amount of results, as an IList&lt;Ticket&gt; collection.
+        /// The time entries that were downloaded from Freshdesk as an
+        /// <see cref="IEnumerable{TicketTimeEntry}"/> collection.
         /// </returns>
-        public async Task<IList<Ticket>> GetTicketsByCompany(
-            long id,
-            int  page,
-            int  quantity = 30
+        public async Task<IEnumerable<TicketTimeEntry>> GetTimeEntries(
+            params FreshdeskQuery[] queries
         )
         {
-            if (quantity < 1 || quantity > 100)
-            {
-                throw new ArgumentOutOfRangeException(
-                    "Parameter 'quantity' out of range, accepted values are between 1 and 100 inclusive."
-                );
-            }
+            var results = await Endpoint.GetItems(
+                              FreshdeskObjectKind.TimeEntry,
+                              queries
+                          );
 
-            if (page < 1)
-            {
-                throw new ArgumentOutOfRangeException(
-                    "Parameter 'page' out of range, value must be 1 or greater."
-                );
-            }
-
-            var result =
-                (IList<object>) await FreshHttpsHelper.DoRequest<IList<Ticket>>(
-                    FreshHttpsHelper.UriForPath(
-                        ApiEndpoint,
-                        "/api/v2/tickets",
-                        "company_id=" + id.ToString() + "&page=" + page.ToString() + "&per_page=" + quantity.ToString() + "&updated_since=2000-01-01T01:00:00Z"
-                    ),
-                    this
-                );
-
-            return CastReadOnlyList<Ticket>(result);
-        }
-
-        /// <summary>
-        /// Gets a list of time entries from the helpdesk time entries list.
-        /// </summary>
-        /// <param name="page">
-        /// The page number.
-        /// </param>
-        /// <param name="quantity">
-        /// The max number of time enrties to return on a given page. The maximum
-        /// Freshdesk will accept is 100.
-        /// </param>
-        /// <returns>
-        /// A list of the company's time entries from the specified page, with a
-        /// specified maximum amount of results, as an IList&lt;TicketTimeEntry&gt;
-        /// collection.
-        /// </returns>
-        public async Task<IList<TicketTimeEntry>> GetTimeEntries(
-            int page,
-            int quantity = 30
-        )
-        {
-            if (quantity < 1 || quantity > 100)
-            {
-                throw new ArgumentOutOfRangeException(
-                    "Parameter 'quantity' out of range, accepted values are between 1 and 100 inclusive."
-                );
-            }
-
-            if (page < 1)
-            {
-                throw new ArgumentOutOfRangeException(
-                    "Parameter 'page' out of range, value must be 1 or greater."
-                );
-            }
-
-            var result =
-                (IList<object>) await FreshHttpsHelper.DoRequest<IList<TicketTimeEntry>>(
-                    FreshHttpsHelper.UriForPath(
-                        ApiEndpoint,
-                        "/api/v2/time_entries",
-                        "page=" + page.ToString() + "&per_page=" + quantity.ToString() + "&executed_after=2000-01-01T01:00:00Z"
-                    ),
-                    this
-                );
-
-            return CastReadOnlyList<TicketTimeEntry>(result);
-        }
-
-
-        /// <summary>
-        /// Helper method for casting IList&lt;object&gt; collections to a read-only
-        /// collection of the specified Type.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The Type to cast to within the resulting collection.
-        /// </typeparam>
-        /// <param name="objCollection">
-        /// The IList&lt;object&gt; collection.
-        /// </param>
-        /// <returns>
-        /// A read-only IList&lt;&gt; collection with generic type T.
-        /// </returns>
-        private IList<T> CastReadOnlyList<T>(
-            IList<object> objCollection
-        )
-        {
-            var castedResult = from obj in objCollection
-                               select (T)obj;
-
-            return new List<T>(castedResult).AsReadOnly();
+            return results.Cast<TicketTimeEntry>();
         }
     }
-
 }

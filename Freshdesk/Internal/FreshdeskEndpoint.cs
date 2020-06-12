@@ -73,8 +73,9 @@ namespace Freshdesk.Internal
             string              apiKey
         )
         {
-            ApiKey  = apiKey;
-            BaseUri = apiEndpoint;
+            ApiKey        = apiKey;
+            ApiWrapperRef = owner;
+            BaseUri       = apiEndpoint;
         }
 
 
@@ -100,17 +101,16 @@ namespace Freshdesk.Internal
             params FreshdeskQuery[] queries
         )
         {
-            WebRequest request =
-                SetupRequest(
-                    HttpMethod.Get,
-                    BuildUri(
-                        BaseUri,
-                        dataType,
-                        queries,
-                        id
-                    ),
-                    ApiKey
-                );
+            WebRequest request = SetupRequest(
+                                     HttpMethod.Get,
+                                     BuildUri(
+                                         BaseUri,
+                                         dataType,
+                                         queries,
+                                         id
+                                     ),
+                                     ApiKey
+                                 );
             string response    = await ReadWebResponse(request);
 
             return FreshdeskJson.DeserializeToType(dataType, response);
@@ -134,16 +134,15 @@ namespace Freshdesk.Internal
             params FreshdeskQuery[] queries
         )
         {
-            WebRequest request =
-                SetupRequest(
-                    HttpMethod.Get,
-                    BuildUri(
-                        BaseUri,
-                        dataType,
-                        queries
-                    ),
-                    ApiKey
-                );
+            WebRequest request = SetupRequest(
+                                     HttpMethod.Get,
+                                     BuildUri(
+                                         BaseUri,
+                                         dataType,
+                                         queries
+                                     ),
+                                     ApiKey
+                                 );
             string response    = await ReadWebResponse(request);
 
             return FreshdeskJson.DeserializeToCollection(dataType, response);
@@ -176,18 +175,17 @@ namespace Freshdesk.Internal
             params FreshdeskQuery[] queries
         )
         {
-            WebRequest request =
-                SetupRequest(
-                    HttpMethod.Get,
-                    BuildUri(
-                        BaseUri,
-                        dataType,
-                        queries,
-                        id,
-                        subDataType
-                    ),
-                    ApiKey
-                );
+            WebRequest request = SetupRequest(
+                                     HttpMethod.Get,
+                                     BuildUri(
+                                         BaseUri,
+                                         dataType,
+                                         queries,
+                                         id,
+                                         subDataType
+                                     ),
+                                     ApiKey
+                                 );
             string response    = await ReadWebResponse(request);
 
             return FreshdeskJson.DeserializeToCollection(subDataType, response);
@@ -375,8 +373,8 @@ namespace Freshdesk.Internal
         /// </returns>
         private WebRequest SetupRequest(
             HttpMethod method,
-            Uri    uri,
-            string apiKey
+            Uri        uri,
+            string     apiKey
         )
         {
             var req = (HttpWebRequest) WebRequest.Create(uri);

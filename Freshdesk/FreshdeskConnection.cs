@@ -143,7 +143,7 @@ namespace Freshdesk
         /// </param>
         /// <returns>
         /// The agents that were downloaded from Freshdesk as an
-        /// <see cref="IList{Agent}"/> collection.
+        /// <see cref="IEnumerable{Agent}"/> collection.
         /// </returns>
         public async Task<IEnumerable<Agent>> GetAgents(
             params FreshdeskQuery[] queries

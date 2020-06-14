@@ -363,7 +363,7 @@ namespace Freshdesk
             params FreshdeskQuery[] queries
         )
         {
-            return await GetTicketTimeEntries(ticket.Id);
+            return await GetTicketTimeEntries(ticket.Id, queries);
         }
 
         /// <summary>

@@ -387,7 +387,7 @@ namespace Freshdesk
             var results = await Endpoint.GetItems(
                               FreshdeskObjectKind.Ticket,
                               ticketId,
-                              FreshdeskObjectKind.Conversation,
+                              FreshdeskObjectKind.TimeEntry,
                               queries
                           );
 

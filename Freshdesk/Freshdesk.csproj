@@ -63,23 +63,11 @@
     <Compile Include="Attachment.cs" />
     <Compile Include="ContactFilterQuery.cs" />
     <Compile Include="ContactFilterState.cs" />
-    <Compile Include="CreateTicketOptions.cs" />
-    <Compile Include="CreateTimeInfo.cs" />
-    <Compile Include="CreateTimeRequest.cs" />
-    <Compile Include="CreateUserRequest.cs" />
-    <Compile Include="CreateCustomerRequest.cs" />
-    <Compile Include="CreateTicketInfo.cs" />
-    <Compile Include="CreateTicketRequest.cs" />
     <Compile Include="TicketFilterQuery.cs" />
     <Compile Include="Framework\FreshdeskJson.cs" />
     <Compile Include="Framework\FreshdeskObjectComparison.cs" />
     <Compile Include="Framework\FreshdeskObjectComparer.cs" />
     <Compile Include="Framework\FreshdeskUtility.cs" />
-    <Compile Include="GetTimeResponse.cs" />
-    <Compile Include="GetUserResponse.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="HelpdeskError.cs" />
-    <Compile Include="FreshHttpsHelper.cs" />
     <Compile Include="FreshdeskQuery.cs" />
     <Compile Include="Internal\FreshdeskEndpoint.cs" />
     <Compile Include="PaginationQuery.cs" />
@@ -99,13 +87,8 @@
     <Compile Include="Schema\TicketTimeEntry.cs" />
     <Compile Include="TicketFilterState.cs" />
     <Compile Include="UpdatedSinceQuery.cs" />
-    <Compile Include="User.cs" />
-    <Compile Include="Customer.cs" />
-    <Compile Include="GetCustomerResponse.cs" />
-    <Compile Include="GetTicketResponse.cs" />
     <Compile Include="FreshdeskService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GetTicketListItemResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

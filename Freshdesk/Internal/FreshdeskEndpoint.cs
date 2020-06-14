@@ -69,8 +69,8 @@ namespace Freshdesk.Internal
         /// </param>
         public FreshdeskEndpoint(
             FreshdeskService owner,
-            Uri                 apiEndpoint,
-            string              apiKey
+            Uri              apiEndpoint,
+            string           apiKey
         )
         {
             ApiKey        = apiKey;

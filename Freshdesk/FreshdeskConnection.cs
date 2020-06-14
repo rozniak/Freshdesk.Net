@@ -277,6 +277,27 @@ namespace Freshdesk
         /// <summary>
         /// Gets conversations on a ticket from Freshdesk.
         /// </summary>
+        /// <param name="ticket">
+        /// The ticket.
+        /// </param>
+        /// <param name="queries">
+        /// An array of queries for the request.
+        /// </param>
+        /// <returns>
+        /// The conversations on the specified ticket that were downloaded from
+        /// Freshdesk as an <see cref="IEnumerable{Conversation}"/> collection.
+        /// </returns>
+        public async Task<IEnumerable<Conversation>> GetTicketConversations(
+            Ticket                  ticket,
+            params FreshdeskQuery[] queries
+        )
+        {
+            return await GetTicketConversations(ticket, queries);
+        }
+
+        /// <summary>
+        /// Gets conversations on a ticket from Freshdesk.
+        /// </summary>
         /// <param name="ticketId">
         /// The ID of the ticket.
         /// </param>
@@ -293,11 +314,11 @@ namespace Freshdesk
         )
         {
             var results = await Endpoint.GetItems(
-                FreshdeskObjectKind.Ticket,
-                ticketId,
-                FreshdeskObjectKind.Conversation,
-                queries
-            );
+                              FreshdeskObjectKind.Ticket,
+                              ticketId,
+                              FreshdeskObjectKind.Conversation,
+                              queries
+                          );
 
             return results.Cast<Conversation>();
         }

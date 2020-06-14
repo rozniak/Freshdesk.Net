@@ -56,18 +56,6 @@ namespace Freshdesk
         )
         {
             Endpoint = new FreshdeskEndpoint(this, apiEndpoint, apiKey);
-
-            // TODO: Bin once FreshHttpsHelper has been replaced by better code
-            //
-            FreshHttpsHelper.AuthorizationKey = apiKey;
-
-            // Use TLS 1.2. Anything lower is deprecated in the Freshdesk API as of
-            // 2020-04-30
-            //
-            // FIXME: Really this should probably be set by the application and not
-            //        this library...?
-            //
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
         }
 
 

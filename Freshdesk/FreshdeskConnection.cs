@@ -325,6 +325,55 @@ namespace Freshdesk
         }
 
         /// <summary>
+        /// Gets time entries on a ticket from Freshdesk.
+        /// </summary>
+        /// <param name="ticket">
+        /// The ticket.
+        /// </param>
+        /// <param name="queries">
+        /// An array of queries for the request.
+        /// </param>
+        /// <returns>
+        /// The time entries on the specified ticket that were downloaded from
+        /// Freshdesk as an <see cref="IEnumerable{TicketTimeEntry}"/> collection.
+        /// </returns>
+        public async Task<IEnumerable<TicketTimeEntry>> GetTicketTimeEntries(
+            Ticket                  ticket,
+            params FreshdeskQuery[] queries
+        )
+        {
+            return await GetTicketTimeEntries(ticket.Id);
+        }
+
+        /// <summary>
+        /// Gets time entries on a ticket from Freshdesk.
+        /// </summary>
+        /// <param name="ticketId">
+        /// The ID of the ticket.
+        /// </param>
+        /// <param name="queries">
+        /// An array of queries for the request.
+        /// </param>
+        /// <returns>
+        /// The time entries on the specified ticket that were downloaded from
+        /// Freshdesk as an <see cref="IEnumerable{TicketTimeEntry}"/> collection.
+        /// </returns>
+        public async Task<IEnumerable<TicketTimeEntry>> GetTicketTimeEntries(
+            long                    ticketId,
+            params FreshdeskQuery[] queries
+        )
+        {
+            var results = await Endpoint.GetItems(
+                              FreshdeskObjectKind.Ticket,
+                              ticketId,
+                              FreshdeskObjectKind.Conversation,
+                              queries
+                          );
+
+            return results.Cast<TicketTimeEntry>();
+        }
+
+        /// <summary>
         /// Gets time entries from Freshdesk.
         /// </summary>
         /// <param name="queries">

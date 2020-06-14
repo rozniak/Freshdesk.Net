@@ -72,47 +72,6 @@ namespace Freshdesk
 
 
         /// <summary>
-        /// Creates a new ticket on the helpdesk.
-        /// </summary>
-        /// <param name="ticket">
-        /// The ticket to create.
-        /// </param>
-        /// <returns>
-        /// The resultant Ticket object that has been finalized on Freshdesk.
-        /// </returns>
-        public async Task<Ticket> CreateTicket(
-            Ticket ticket
-        )
-        {
-            if (ticket == null)
-            {
-                throw new ArgumentNullException(
-                    "Parameter 'ticket' cannot be null."
-                );
-            }
-
-            //return (Ticket) await FreshHttpsHelper.DoRequest<Ticket>(FreshHttpsHelper.UriForPath(ConnectionUri, "/api/v2/tickets"), "POST", JsonConvert.SerializeObject(ticket));
-            return null;
-        }
-
-        /// <summary>
-        /// Delete a ticket from the helpdesk by its ID.
-        /// </summary>
-        /// <param name="id">
-        /// The ID of the ticket.
-        /// </param>
-        /// <returns>
-        /// True if the ticket was deleted or does not exist.
-        /// </returns>
-        public async Task<bool> DeleteTicket(
-            long id
-        )
-        {
-            // TODO: Code this
-            return false;
-        }
-
-        /// <summary>
         /// Gets an agent from Freshdesk.
         /// </summary>
         /// <param name="id">

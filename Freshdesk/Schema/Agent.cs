@@ -82,7 +82,7 @@ namespace Freshdesk.Schema
         /// <summary>
         /// The Freshdesk connection instance that was used to acquire this agent.
         /// </summary>
-        private FreshdeskConnection FreshdeskConnection { get; set; }
+        private FreshdeskService FreshdeskConnection { get; set; }
 
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Freshdesk.Schema
         /// </summary>
         /// <param name="json">The JSON to deserialize from.</param>
         /// <param name="fdConn">The Freshdesk connection used to acquire this agent.</param>
-        public Agent(string json, FreshdeskConnection fdConn = null)
+        public Agent(string json, FreshdeskService fdConn = null)
         {
             JsonConvert.PopulateObject(json, this);
             JObject jObj = (JObject)JObject.Parse(json)["contact"];
@@ -110,7 +110,7 @@ namespace Freshdesk.Schema
         /// </summary>
         /// <param name="obj">The JSON object.</param>
         /// <param name="fdConn">The Freshdesk connection used to acquire this agent.</param>
-        public Agent(JObject obj, FreshdeskConnection fdConn = null)
+        public Agent(JObject obj, FreshdeskService fdConn = null)
         {
             using (var jReader = obj.CreateReader())
             {

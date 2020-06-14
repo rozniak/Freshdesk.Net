@@ -107,7 +107,7 @@ namespace Freshdesk.Schema
         /// <summary>
         /// The Freshdesk connection instance that was used to acquire this time entry.
         /// </summary>
-        private FreshdeskConnection FreshdeskConnection { get; set; }
+        private FreshdeskService FreshdeskConnection { get; set; }
 
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Freshdesk.Schema
         /// </summary>
         /// <param name="json">The JSON to deserialize from.</param>
         /// <param name="fdConn">The Freshdesk connection used to acquire this time entry.</param>
-        public TicketTimeEntry(string json, FreshdeskConnection fdConn = null)
+        public TicketTimeEntry(string json, FreshdeskService fdConn = null)
         {
             JsonConvert.PopulateObject(json, this);
 
@@ -132,7 +132,7 @@ namespace Freshdesk.Schema
         /// </summary>
         /// <param name="obj">The JSON object.</param>
         /// <param name="fdConn">The Freshdesk connection used to acquire this time entry.</param>
-        public TicketTimeEntry(JObject obj, FreshdeskConnection fdConn = null)
+        public TicketTimeEntry(JObject obj, FreshdeskService fdConn = null)
         {
             using (var jReader = obj.CreateReader())
             {

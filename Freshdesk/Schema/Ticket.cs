@@ -237,7 +237,7 @@ namespace Freshdesk.Schema
         /// <summary>
         /// The Freshdesk connection instance that was used to acquire this ticket.
         /// </summary>
-        private FreshdeskConnection FreshdeskConnection { get; set; }
+        private FreshdeskService FreshdeskConnection { get; set; }
 
         /// <summary>
         /// The conversations of this ticket retrieved from JSON.
@@ -256,7 +256,7 @@ namespace Freshdesk.Schema
         /// </summary>
         /// <param name="json">The JSON to deserialize from.</param>
         /// <param name="fdConn">The Freshdesk connection used to acquire this ticket.</param>
-        public Ticket(string json, FreshdeskConnection fdConn = null)
+        public Ticket(string json, FreshdeskService fdConn = null)
         {
             JsonConvert.PopulateObject(json, this);
 
@@ -268,7 +268,7 @@ namespace Freshdesk.Schema
         /// </summary>
         /// <param name="obj">The JSON object.</param>
         /// <param name="fdConn">The Freshdesk connection used to acquire this ticket.</param>
-        public Ticket(JObject obj, FreshdeskConnection fdConn = null)
+        public Ticket(JObject obj, FreshdeskService fdConn = null)
         {
             using (var jReader = obj.CreateReader())
             {

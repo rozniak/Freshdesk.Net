@@ -52,14 +52,14 @@ namespace Freshdesk.Internal
         /// The reference to the public API wrapper that will be passed onto objects
         /// spawned by this instance.
         /// </summary>
-        private FreshdeskConnection ApiWrapperRef { get; set; }
+        private FreshdeskService ApiWrapperRef { get; set; }
 
 
         /// <summary>
         /// Initializes a new instance of the FreshdeskEndpoint class.
         /// </summary>
         /// <param name="owner">
-        /// The owning <see cref="FreshdeskConnection"/> instance.
+        /// The owning <see cref="FreshdeskService"/> instance.
         /// </param>
         /// <param name="apiEndpoint">
         /// The base URI for the API endpoint.
@@ -68,7 +68,7 @@ namespace Freshdesk.Internal
         /// The API key used to authenticate against the endpoint.
         /// </param>
         public FreshdeskEndpoint(
-            FreshdeskConnection owner,
+            FreshdeskService owner,
             Uri                 apiEndpoint,
             string              apiKey
         )

@@ -103,7 +103,7 @@
     <Compile Include="Customer.cs" />
     <Compile Include="GetCustomerResponse.cs" />
     <Compile Include="GetTicketResponse.cs" />
-    <Compile Include="FreshdeskConnection.cs" />
+    <Compile Include="FreshdeskService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GetTicketListItemResponse.cs" />
   </ItemGroup>

@@ -24,7 +24,7 @@ namespace Freshdesk
     /// <summary>
     /// Provides an interface to the public Freshdesk API.
     /// </summary>
-    public class FreshdeskConnection
+    public class FreshdeskService
     {
         /// <summary>
         /// Gets or sets the URI of the API endpoint.
@@ -50,7 +50,7 @@ namespace Freshdesk
         /// <param name="apiKey">
         /// The API key used to authenticate against the endpoint.
         /// </param>
-        public FreshdeskConnection(
+        public FreshdeskService(
             Uri    apiEndpoint,
             string apiKey
         )

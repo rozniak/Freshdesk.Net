@@ -117,7 +117,7 @@ namespace Freshdesk
         /// <param name="uri">The URI of the target.</param>
         /// <param name="fdConn">The Freshdesk connection instance to pass onto the created object.</param>
         /// <returns>The response from the remote host, deserialized into the specified Type, cast as an object.</returns>
-        public static async Task<object> DoRequest<T>(Uri uri, FreshdeskConnection fdConn = null)
+        public static async Task<object> DoRequest<T>(Uri uri, FreshdeskService fdConn = null)
         {
             return await DoRequest<T>(uri, "GET", null, fdConn);
         }
@@ -131,7 +131,7 @@ namespace Freshdesk
         /// <param name="body">The request body.</param>
         /// <param name="fdConn">The Freshdesk connection instance to pass onto the created object.</param>
         /// <returns>The response from the remote host, deserialized into the specified Type, cast as an object.</returns>
-        public static async Task<object> DoRequest<T>(Uri uri, string method, string body, FreshdeskConnection fdConn = null)
+        public static async Task<object> DoRequest<T>(Uri uri, string method, string body, FreshdeskService fdConn = null)
         {
             var json = await DoRequest(uri, method, body);
             Type genericType = typeof(T);

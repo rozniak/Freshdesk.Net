@@ -172,7 +172,7 @@ namespace Freshdesk.Schema
         /// <summary>
         /// The Freshdesk connection instance that was used to acquire this conversation.
         /// </summary>
-        private FreshdeskConnection FreshdeskConnection { get; set; }
+        private FreshdeskService FreshdeskConnection { get; set; }
 
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace Freshdesk.Schema
         /// Initializes a new instance of the Conversation class.
         /// </summary>
         /// <param name="fdConn">The Freshdesk connection used to acquire this conversation.</param>
-        public Conversation(FreshdeskConnection fdConn = null)
+        public Conversation(FreshdeskService fdConn = null)
         {
             FreshdeskConnection = fdConn;
 
@@ -198,7 +198,7 @@ namespace Freshdesk.Schema
         /// </summary>
         /// <param name="json">The JSON to deserialize from.</param>
         /// <param name="fdConn">The Freshdesk connection used to acquire this conversation.</param>
-        public Conversation(string json, FreshdeskConnection fdConn = null)
+        public Conversation(string json, FreshdeskService fdConn = null)
         {
             JsonConvert.PopulateObject(json, this);
 
@@ -210,7 +210,7 @@ namespace Freshdesk.Schema
         /// </summary>
         /// <param name="obj">The JSON object.</param>
         /// <param name="fdConn">The Freshdesk connection used to acquire this conversation.</param>
-        public Conversation(JObject obj, FreshdeskConnection fdConn = null)
+        public Conversation(JObject obj, FreshdeskService fdConn = null)
         {
             using (var jReader = obj.CreateReader())
             {

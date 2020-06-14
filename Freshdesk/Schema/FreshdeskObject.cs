@@ -33,7 +33,7 @@ namespace Freshdesk.Schema
         /// <summary>
         /// Gets or sets the Freshdesk connection instance associated with the object.
         /// </summary>
-        public FreshdeskConnection Freshdesk { get; internal set; }
+        public FreshdeskService Freshdesk { get; internal set; }
 
         /// <summary>
         /// Gets or sets  the date the object was updated.

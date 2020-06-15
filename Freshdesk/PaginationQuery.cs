@@ -36,8 +36,8 @@ namespace Freshdesk
 
 
         /// <summary>
-        /// Initializes a new instance of the PaginationQuery class using the specified
-        /// parameter.
+        /// Initializes a new instance of the <see cref="PaginationQuery"/> class using
+        /// the specified parameter.
         /// </summary>
         /// <param name="page">
         /// The page number.

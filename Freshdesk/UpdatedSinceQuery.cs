@@ -36,8 +36,8 @@ namespace Freshdesk
 
 
         /// <summary>
-        /// Initializes a new instance of the UpdatedSinceQuery class using the
-        /// specified parameter.
+        /// Initializes a new instance of the <see cref="UpdatedSinceQuery"/> class
+        /// using the specified parameter.
         /// </summary>
         /// <param name="threshold">
         /// The date threshold.

@@ -254,16 +254,24 @@ namespace Freshdesk.Schema
 
 
         /// <summary>
-        /// Initializes a new instance of the Ticket class.
+        /// Initializes a new instance of the <see cref="Ticket"/> class.
         /// </summary>
         public Ticket() { }
 
         /// <summary>
-        /// Initializes a new instance of the Ticket class from JSON source data.
+        /// Initializes a new instance of the <see cref="Ticket"/> class from JSON
+        /// source data.
         /// </summary>
-        /// <param name="json">The JSON to deserialize from.</param>
-        /// <param name="fdConn">The Freshdesk connection used to acquire this ticket.</param>
-        public Ticket(string json, FreshdeskService fdConn = null)
+        /// <param name="json">
+        /// The JSON to deserialize from.
+        /// </param>
+        /// <param name="fdConn">
+        /// The Freshdesk connection used to acquire this ticket.
+        /// </param>
+        public Ticket(
+            string json,
+            FreshdeskService fdConn = null
+        )
         {
             JsonConvert.PopulateObject(json, this);
 
@@ -271,11 +279,19 @@ namespace Freshdesk.Schema
         }
 
         /// <summary>
-        /// Initializes a new instance of the Ticket class from a JSON object.
+        /// Initializes a new instance of the <see cref="Ticket"/> class from a JSON
+        /// object.
         /// </summary>
-        /// <param name="obj">The JSON object.</param>
-        /// <param name="fdConn">The Freshdesk connection used to acquire this ticket.</param>
-        public Ticket(JObject obj, FreshdeskService fdConn = null)
+        /// <param name="obj">
+        /// The JSON object.
+        /// </param>
+        /// <param name="fdConn">
+        /// The Freshdesk connection used to acquire this ticket.
+        /// </param>
+        public Ticket(
+            JObject obj,
+            FreshdeskService fdConn = null
+        )
         {
             using (var jReader = obj.CreateReader())
             {
@@ -287,17 +303,28 @@ namespace Freshdesk.Schema
 
 
         /// <summary>
-        /// Retrieves the conversations of this ticket.
+        /// Gets the conversations on this ticket.
         /// </summary>
-        /// <param name="page">The page number.</param>
-        /// <returns>The conversations of this ticket as a read-only IList&lt;Conversation&gt; conversation.</returns>
-        public async Task<IEnumerable<Conversation>> GetConversations(int page)
+        /// <param name="page">
+        /// The page number.
+        /// </param>
+        /// <returns>
+        /// The conversations on this ticket as an
+        /// <see cref="IEnumerable{Conversation}"/> collection.
+        /// </returns>
+        public async Task<IEnumerable<Conversation>> GetConversations(
+            int page
+        )
         {
             if (JsonConversations != null)
+            {
                 return JsonConversations;
+            }
 
             if (Freshdesk == null)
+            {
                 throw new InvalidOperationException("Ticket.InitializeConversations: No Freshdesk connection has been provided for this ticket.");
+            }
             
             return await Freshdesk.GetTicketConversations(
                 Id,

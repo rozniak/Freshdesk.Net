@@ -36,8 +36,8 @@ namespace Freshdesk.Framework
 
 
         /// <summary>
-        /// Initializes a new instance of the FreshdeskObjectComparer class using the
-        /// specified comparison type.
+        /// Initializes a new instance of the <see cref="FreshdeskObjectComparer"/>
+        /// class using the specified comparison type.
         /// </summary>
         /// <param name="comparisonType">
         /// One of the enumeration values that specifies how the objects will be

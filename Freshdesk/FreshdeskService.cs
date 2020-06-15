@@ -64,7 +64,7 @@ namespace Freshdesk
 
 
         /// <summary>
-        /// Initializes a new instance of the FreshdeskConnection class.
+        /// Initializes a new instance of the <see cref="FreshdeskService"/> class.
         /// </summary>
         /// <param name="apiEndpoint">
         /// The base URI for the API endpoint.

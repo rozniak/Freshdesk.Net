@@ -36,8 +36,8 @@ namespace Freshdesk
 
 
         /// <summary>
-        /// Initializes a new instance of the ContactFilterQuery class using the
-        /// specified parameter.
+        /// Initializes a new instance of the <see cref="ContactFilterQuery"/> class
+        /// using the specified parameter.
         /// </summary>
         /// <param name="state">
         /// The contact filter state.

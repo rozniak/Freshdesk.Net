@@ -36,8 +36,8 @@ namespace Freshdesk
 
 
         /// <summary>
-        /// Initializes a new instance of the TicketFilterQuery class using the
-        /// specified parameter.
+        /// Initializes a new instance of the <see cref="TicketFilterQuery"/> class
+        /// using the specified parameter.
         /// </summary>
         /// <param name="state">
         /// The ticket filter state.

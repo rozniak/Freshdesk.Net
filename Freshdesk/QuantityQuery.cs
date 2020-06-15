@@ -36,8 +36,8 @@ namespace Freshdesk
 
 
         /// <summary>
-        /// Initializes a new instance of the QuantityQuery class using the specified
-        /// parameter.
+        /// Initializes a new instance of the <see cref="QuantityQuery"/> class using
+        /// the specified parameter.
         /// </summary>
         /// <param name="quantity">
         /// The quantity.

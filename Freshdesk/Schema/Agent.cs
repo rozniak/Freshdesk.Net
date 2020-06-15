@@ -98,11 +98,19 @@ namespace Freshdesk.Schema
         public Agent() { }
 
         /// <summary>
-        /// Initializes a new instance of the Agent class from JSON source data.
+        /// Initializes a new instance of the <see cref="Agent"/> class from JSON
+        /// source data.
         /// </summary>
-        /// <param name="json">The JSON to deserialize from.</param>
-        /// <param name="fdConn">The Freshdesk connection used to acquire this agent.</param>
-        public Agent(string json, FreshdeskService fdConn = null)
+        /// <param name="json">
+        /// The JSON to deserialize from.
+        /// </param>
+        /// <param name="fdConn">
+        /// The Freshdesk connection used to acquire this agent.
+        /// </param>
+        public Agent(
+            string           json,
+            FreshdeskService fdConn = null
+        )
         {
             JsonConvert.PopulateObject(json, this);
             JObject jObj = (JObject)JObject.Parse(json)["contact"];
@@ -113,11 +121,19 @@ namespace Freshdesk.Schema
         }
 
         /// <summary>
-        /// Initializes a new instance of the Agent class from a JSON object.
+        /// Initializes a new instance of the <see cref="Agent"/> class from a JSON
+        /// object.
         /// </summary>
-        /// <param name="obj">The JSON object.</param>
-        /// <param name="fdConn">The Freshdesk connection used to acquire this agent.</param>
-        public Agent(JObject obj, FreshdeskService fdConn = null)
+        /// <param name="obj">
+        /// The JSON object.
+        /// </param>
+        /// <param name="fdConn">
+        /// The Freshdesk connection used to acquire this agent.
+        /// </param>
+        public Agent(
+            JObject          obj,
+            FreshdeskService fdConn = null
+        )
         {
             using (var jReader = obj.CreateReader())
             {

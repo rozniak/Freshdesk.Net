@@ -75,16 +75,24 @@ namespace Freshdesk.Schema
 
 
         /// <summary>
-        /// Initializes a new instance of the Company class.
+        /// Initializes a new instance of the <see cref="Company"/> class.
         /// </summary>
         public Company() { }
 
         /// <summary>
-        /// Initializes a new instance of the Company class from JSON source data.
+        /// Initializes a new instance of the <see cref="Company"/> class from JSON
+        /// source data.
         /// </summary>
-        /// <param name="json">The JSON to deserialize from.</param>
-        /// <param name="fdConn">The Freshdesk connection used to acquire this company.</param>
-        public Company(string json, FreshdeskService fdConn = null)
+        /// <param name="json">
+        /// The JSON to deserialize from.
+        /// </param>
+        /// <param name="fdConn">
+        /// The Freshdesk connection used to acquire this company.
+        /// </param>
+        public Company(
+            string           json,
+            FreshdeskService fdConn = null
+        )
         {
             JsonConvert.PopulateObject(json, this);
 
@@ -92,11 +100,19 @@ namespace Freshdesk.Schema
         }
 
         /// <summary>
-        /// Initializes a new instance of the Company class from a JSON object.
+        /// Initializes a new instance of the <see cref="Company"/> class from a JSON
+        /// object.
         /// </summary>
-        /// <param name="obj">The JSON object.</param>
-        /// <param name="fdConn">The Freshdesk connection used to acquire this company.</param>
-        public Company(JObject obj, FreshdeskService fdConn = null)
+        /// <param name="obj">
+        /// The JSON object.
+        /// </param>
+        /// <param name="fdConn">
+        /// The Freshdesk connection used to acquire this company.
+        /// </param>
+        public Company(
+            JObject          obj,
+            FreshdeskService fdConn = null
+        )
         {
             using (var jReader = obj.CreateReader())
             {

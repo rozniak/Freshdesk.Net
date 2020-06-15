@@ -74,7 +74,8 @@ namespace Freshdesk.Internal
 
 
         /// <summary>
-        /// Initializes a new instance of the FreshdeskEndpoint class.
+        /// Initializes a new instance of the <see cref="FreshdeskEndpoint"/>
+        /// class.
         /// </summary>
         /// <param name="owner">
         /// The owning <see cref="FreshdeskService"/> instance.

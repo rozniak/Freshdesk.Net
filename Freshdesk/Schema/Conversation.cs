@@ -183,29 +183,41 @@ namespace Freshdesk.Schema
 
 
         /// <summary>
-        /// Initializes a new instance of the Conversation class.
+        /// Initializes a new instance of the <see cref="Conversation"/> class.
         /// </summary>
         public Conversation() { }
 
         /// <summary>
-        /// Initializes a new instance of the Conversation class.
+        /// Initializes a new instance of the <see cref="Conversation"/> class.
         /// </summary>
-        /// <param name="fdConn">The Freshdesk connection used to acquire this conversation.</param>
-        public Conversation(FreshdeskService fdConn = null)
+        /// <param name="fdConn">
+        /// The Freshdesk connection used to acquire this conversation.
+        /// </param>
+        public Conversation(
+            FreshdeskService fdConn = null
+        )
         {
             FreshdeskConnection = fdConn;
 
-            _CustomBccEmails = new List<string>();
-            _CustomCcEmails = new List<string>();
+            _CustomBccEmails   = new List<string>();
+            _CustomCcEmails    = new List<string>();
             _CustomNotifyUsers = new List<string>();
         }
 
         /// <summary>
-        /// Initializes a new instance of the Conversation class from JSON source data.
+        /// Initializes a new instance of the <see cref="Conversation"/> class from
+        /// JSON source data.
         /// </summary>
-        /// <param name="json">The JSON to deserialize from.</param>
-        /// <param name="fdConn">The Freshdesk connection used to acquire this conversation.</param>
-        public Conversation(string json, FreshdeskService fdConn = null)
+        /// <param name="json">
+        /// The JSON to deserialize from.
+        /// </param>
+        /// <param name="fdConn">
+        /// The Freshdesk connection used to acquire this conversation.
+        /// </param>
+        public Conversation(
+            string           json,
+            FreshdeskService fdConn = null
+        )
         {
             JsonConvert.PopulateObject(json, this);
 
@@ -213,11 +225,19 @@ namespace Freshdesk.Schema
         }
 
         /// <summary>
-        /// Initializes a new instance of the Conversation class from a JSON object.
+        /// Initializes a new instance of the <see cref="Conversation"/> class from a
+        /// JSON object.
         /// </summary>
-        /// <param name="obj">The JSON object.</param>
-        /// <param name="fdConn">The Freshdesk connection used to acquire this conversation.</param>
-        public Conversation(JObject obj, FreshdeskService fdConn = null)
+        /// <param name="obj">
+        /// The JSON object.
+        /// </param>
+        /// <param name="fdConn">
+        /// The Freshdesk connection used to acquire this conversation.
+        /// </param>
+        public Conversation(
+            JObject obj,
+            FreshdeskService fdConn = null
+        )
         {
             using (var jReader = obj.CreateReader())
             {

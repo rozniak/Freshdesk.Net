@@ -1,13 +1,28 @@
 ﻿/*
- * Freshdesk.FreshdeskConnection -- Main Freshdesk API Implementation
+ * Copyright 2015 Beckersoft, Inc.
  *
- * This source-code is part of the Freshdesk API for C# library by Rory Fewell (rozniak) of Oddmatics for Agile ICT for Education Ltd.:
- * <<https://oddmatics.uk>>
- * <<http://www.agileict.co.uk>>
+ * Author(s):
+ *  John Becker (john@beckersoft.com)
+ *  Oleg Shevchenko (shevchenko.oleg@outlook.com)
+ *  Joseph Poh (github user jozsurf)
+ *  (github user ninjacarr)
+ *  (github user sloppypointless)
+ *  Rory Fewell (rory.fewell@agileict.co.uk)
+ *  
+ *  Some web code is derived from work authored by:
+ * 	Gonzalo Paniagua Javier (gonzalo@xamarin.com)
  * 	
- * Copyright (C) 2017 Oddmatics
- * 	
- * Sharing, editing and general licence term information can be found inside of the "LICENSE.MD" file that should be located in the root of this project's directory structure.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 using Freshdesk.Internal;

@@ -119,7 +119,7 @@ namespace Freshdesk.Internal
             params FreshdeskQuery[] queries
         )
         {
-            WebRequest request       = SetupRequest(
+            WebRequest      request  = SetupRequest(
                                            HttpMethod.Get,
                                            BuildUri(
                                                BaseUri,
@@ -158,16 +158,16 @@ namespace Freshdesk.Internal
             params FreshdeskQuery[] queries
         )
         {
-            WebRequest request = SetupRequest(
-                                     HttpMethod.Get,
-                                     BuildUri(
-                                         BaseUri,
-                                         dataType,
-                                         queries
-                                     ),
-                                     ApiKey
-                                 );
-            string response    = await ReadWebResponse(request);
+            WebRequest request  = SetupRequest(
+                                      HttpMethod.Get,
+                                      BuildUri(
+                                          BaseUri,
+                                          dataType,
+                                          queries
+                                      ),
+                                      ApiKey
+                                  );
+            string     response = await ReadWebResponse(request);
 
             return PrepareResults(
                 FreshdeskJson.DeserializeToCollection(dataType, response)
@@ -201,18 +201,18 @@ namespace Freshdesk.Internal
             params FreshdeskQuery[] queries
         )
         {
-            WebRequest request = SetupRequest(
-                                     HttpMethod.Get,
-                                     BuildUri(
-                                         BaseUri,
-                                         dataType,
-                                         queries,
-                                         id,
-                                         subDataType
-                                     ),
-                                     ApiKey
-                                 );
-            string response    = await ReadWebResponse(request);
+            WebRequest request  = SetupRequest(
+                                      HttpMethod.Get,
+                                      BuildUri(
+                                          BaseUri,
+                                          dataType,
+                                          queries,
+                                          id,
+                                          subDataType
+                                      ),
+                                      ApiKey
+                                  );
+            string     response = await ReadWebResponse(request);
 
             return PrepareResults(
                 FreshdeskJson.DeserializeToCollection(subDataType, response)

@@ -43,21 +43,21 @@ namespace Freshdesk.Internal
         private static readonly Encoding Encoding = Encoding.UTF8;
 
         /// <summary>
-        /// The timeout for <see cref="WebRequest.GetResponseAsync"/> calls made by
-        /// this class.
-        /// </summary>
-        private const int RequestTimeout = 10000;
-
-        /// <summary>
         /// The user agent string to use during transmission.
         /// </summary>
         private const string UserAgent = "Freshdesk.NET (1.0)";
 
 
         /// <summary>
-        /// The base URI of the API endpoint.
+        /// Gets or sets base URI of the API endpoint.
         /// </summary>
         public Uri BaseUri { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the timeout for <see cref="WebRequest.GetResponseAsync"/>
+        /// calls made by this class.
+        /// </summary>
+        public int RequestTimeout { get; set; }
 
 
         /// <summary>
@@ -94,6 +94,10 @@ namespace Freshdesk.Internal
             ApiKey        = apiKey;
             ApiWrapperRef = owner;
             BaseUri       = apiEndpoint;
+
+            // Configuration defaults
+            //
+            RequestTimeout = 10000;
         }
 
 

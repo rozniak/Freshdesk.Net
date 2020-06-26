@@ -47,6 +47,15 @@ namespace Freshdesk
             get { return Endpoint.BaseUri; }
         }
 
+        /// <summary>
+        /// Gets or sets the timeout for web requests made to the Freshdesk API.
+        /// </summary>
+        public int RequestTimeout
+        {
+            get { return Endpoint.RequestTimeout; }
+            set { Endpoint.RequestTimeout = value; }
+        }
+
 
         /// <summary>
         /// The communication layer for performing the API calls to Freshdesk.

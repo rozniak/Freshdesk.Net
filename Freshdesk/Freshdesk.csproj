@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attachment.cs" />
+    <Compile Include="CompanyIdQuery.cs" />
     <Compile Include="ContactFilterQuery.cs" />
     <Compile Include="ContactFilterState.cs" />
     <Compile Include="TicketFilterQuery.cs" />
